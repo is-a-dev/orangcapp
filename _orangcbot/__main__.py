@@ -9,5 +9,5 @@ bot = commands.Bot(intents=Intents.all(), command_prefix="oc/", help_command=com
 bot.load_extension("onami")
 bot.load_extension("extensions.fun")
 bot.load_extension("extensions.tags")
-bot.load_extension("extensions.forum")
+# bot.load_extension("extensions.forum")
 bot.run(environ["TOKEN"])
