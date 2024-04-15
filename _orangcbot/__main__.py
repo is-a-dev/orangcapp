@@ -1,10 +1,11 @@
 from os import environ
+
 from dotenv import load_dotenv
 
 load_dotenv()
 import nextcord
-from nextcord.ext import commands
 from nextcord import Intents
+from nextcord.ext import commands
 
 bot = commands.Bot(
     intents=Intents.all(),

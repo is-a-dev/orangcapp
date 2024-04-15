@@ -1,6 +1,5 @@
-from nextcord.ext import commands
-
 import nextcord
+from nextcord.ext import commands
 
 nohelp = """
 Hey you! This is not a help channel!\n

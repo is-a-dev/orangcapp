@@ -1,10 +1,10 @@
+import nextcord
 from nextcord.ext import commands
 from psl_dns import PSL
-import nextcord
 
 _psl = PSL()
-from typing import Optional
 from random import choice
+from typing import Optional
 
 _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
 
