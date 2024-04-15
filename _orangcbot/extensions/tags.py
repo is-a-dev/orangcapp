@@ -14,7 +14,7 @@ class Tags(commands.Cog):
     
     @commands.command()
     async def nohelp(self, ctx):
-        if ctx.channel.id == 830872854677422153:
+        if ctx.channel.id in [830872854677422153, 1057228967972716584]:
             embed = nextcord.Embed(
                 title= "Please... this is not a help channel",
                 description = nohelp,
