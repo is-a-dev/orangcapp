@@ -19,8 +19,6 @@ class View(nextcord.ui.View):
     async def _bonk(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         if interaction.user.id == self._ctx.author.id:
             await self.message.edit(content=choice(_bonk_ans))
-        else:
-            await interaction.send("No.", ephemeral=True)
 
 class Fun(commands.Cog):
     def __init__(self, bot):
