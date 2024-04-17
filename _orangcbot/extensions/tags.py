@@ -12,9 +12,9 @@ Have fun!"""
 
 waittime = """
 Because my ancestor, orangc, is a degenerate and the maintainers are busy dealing with him, we are unable to provide you immediate assistance.
-ETA for merging varies between a second to a eternities.
+ETA for merging varies between a second to a eternity.
 Remember, a watched pot never boils, so why don't get your other work done and maybe your is-a.dev PR will be merged in that time? Hyper-hyper-efficient time management!
-Maintainers shouldn't be spending all our time merging PRs and neither should you spend all your time waiting for it.
+Maintainers shouldn't be spending all their time merging PRs and neither should you spend all your time waiting for it.
 """
 
 
