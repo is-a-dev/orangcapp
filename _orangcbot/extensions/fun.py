@@ -24,9 +24,8 @@ _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
 #        async with session.get(f"https://randommer.io/api/{path}", params=params, headers={"X-Api-Key": _randommer_api_key}) as response:
 #            return await response.json()
 class _BattleInvitation:
-    def __eq__(self, a, b):
-        return a.uid1 == b.uid1 and a.uid2 == b.uid2
     def __init__(self, uid1, uid2):
+        self.id = str(uid1) + str(uid2)
         self.uid1: int = uid1
         self.uid2: int = uid2
 
@@ -162,7 +161,7 @@ class Fun(commands.Cog):
 
 
         def check(m: _BattleInvitation):
-            return m == inv
+            return m.id == inv.id
         await ctx.bot.wait_for("battle_acceptance", check=check, timeout=60)
         k = SlapView(inv, ctx)
         end = datetime.datetime.now() + datetime.timedelta(seconds=90)
