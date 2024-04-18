@@ -26,7 +26,7 @@ _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
 class _BattleInvitation:
     def __eq__(self, a, b):
         return a.uid1 == b.uid1 and a.uid2 == b.uid2
-    def __init__(uid1, uid2):
+    def __init__(self, uid1, uid2):
         self.uid1: int = uid1
         self.uid2: int = uid2
 
