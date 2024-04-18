@@ -32,6 +32,7 @@ class _BattleInvitation:
 
 class SlapConfirmView(nextcord.ui.View):
     def __init__(self, ctx: commands.Context, invitation: _BattleInvitation):
+        super().__init__()
         self._ctx: commands.Context = ctx
         self._invitation: _BattleInvitation = invitation
 
@@ -45,6 +46,7 @@ class SlapConfirmView(nextcord.ui.View):
 
 class SlapView(nextcord.ui.View):
     def __init__(self, *, invitation: _BattleInvitation, ctx: commands.Context):
+        super().__init__()
         self._invitation = invitation
         self._ctx = _ctx
         self._message: Optional[nextcord.Message] = None
