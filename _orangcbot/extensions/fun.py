@@ -156,7 +156,8 @@ class Fun(commands.Cog):
     @commands.command()
     async def slappy(self, ctx: commands.Context, *, user: nextcord.Member):
         inv = _BattleInvitation(ctx.author.id, user.id)
-        await ctx.send(f"<@{int(user.user.id)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.", allowed_mentions=nextcord.AllowedMentions.none(), view=SlapConfirmView(ctx, inv))
+        await ctx.send(f"<@{int(user.id)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.", allowed_mentions=nextcord.AllowedMentions.none(), view=SlapConfirmView(ctx, inv))
+
 
         def check(m: _BattleInvitation):
             return m == inv
