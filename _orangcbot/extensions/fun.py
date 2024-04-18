@@ -5,9 +5,9 @@ import aiohttp
 
 import dotenv
 dotenv.load_dotenv()
-
+import datetime
 # import os
-
+import asyncio
 _psl = PSL()
 from typing import Optional
 from random import choice
@@ -23,6 +23,61 @@ _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
 #    async with aiohttp.ClientSession() as session:
 #        async with session.get(f"https://randommer.io/api/{path}", params=params, headers={"X-Api-Key": _randommer_api_key}) as response:
 #            return await response.json()
+class _BattleInvitation:
+    def __eq__(self, a, b):
+        return a.uid1 == b.uid1 and a.uid2 == b.uid2
+    def __init__(uid1, uid2):
+        self.uid1: int = uid1
+        self.uid2: int = uid2
+
+class SlapConfirmView(nextcord.ui.View):
+    def __init__(self, ctx: commands.Context, invitation: _BattleInvitation):
+        self._ctx: commands.Context = ctx
+        self._invitation: _BattleInvitation = invitation
+
+    @nextcord.ui.button(label="Confirm Battle", style=nextcord.ButtonStyle.blurple)
+    async def _confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if self._invitation.uid2 == interaction.user.id:
+            await _ctx.send("Player 2 has accepted the Slappy Slappy battle.")
+            _ctx.bot.dispatch("battle_acceptance", _invitation)
+        else:
+            await interaction.send("You are not the invited competitor!", ephemeral=True)
+
+class SlapView(nextcord.ui.View):
+    def __init__(self, *, invitation: _BattleInvitation, ctx: commands.Context):
+        self._invitation = invitation
+        self._ctx = _ctx
+        self._message: Optional[nextcord.Message] = None
+        self._user_1_count = 0
+        self._user_2_count = 0
+        
+    
+    async def timeout(self):
+        asyncio.sleep(90)
+        self.children[0].disabled = True
+        self.stop()
+
+    def set_message(self, message):
+        self.message = message
+
+    def determine_winner(self):
+        return self._invitation.uid1 if self._user_1_count > self._user_2_count else self._invitation.uid2
+
+    @nextcord.ui.button(label="Slap!", style=nextcord.ButtonStyle.red)
+    async def _slap(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user.id == self._invitation.uid1:
+            self._user_1_count += 1
+            await interaction.response.defer()
+        if interaction.user.id == self._invitation.uid2:
+            self._user_2_count += 1
+            await interaction.response.defer()
+        else:
+            await interaction.response.send_message("You are not a competitor.", ephemeral=True)
+
+    
+
+
+        
         
 class BonkView(nextcord.ui.View):
     def __init__(self, ctx):
@@ -97,6 +152,23 @@ class Fun(commands.Cog):
             text=f"👍 {data['list'][0]['thumbs_up']} | 👎 {data['list'][0]['thumbs_down']} | Powered by: Urban Dictionary"
         )
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def slappy(self, ctx: commands.Context, *, user: nextcord.Member):
+        inv = _BattleInvitation(ctx.author.id, user.id)
+        await ctx.send(f"<@{int(user)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.", allowed_mentions=nextcord.AllowedMentions.none(), view=SlapConfirmView(ctx, inv))
+
+        def check(m: _BattleInvitation):
+            return m == inv
+        await _ctx.bot.wait_for("battle_acceptance", check=check)
+        k = SlapView(inv, ctx)
+        end = datetime.datetime.now() + datetime.timedelta(seconds=90)
+        i = await ctx.send(f"<@{int(inv.uid1)}> and <@{inv.uid2}> has gone for a Slappy Slappy game. Press the button to score. This game ends in {nextcord.utils.format_dt(end, style='R')}.", allowed_mentions=nextcord.AllowedMentions.none(), view=k)
+        await k.wait()
+        winner = k.determine_winner()
+        await i.edit(f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappt game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.", allowed_mentions=nextcord.AllowedMentions.none(), view=k)
+
+        
 
 
 
