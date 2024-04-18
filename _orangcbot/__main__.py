@@ -14,7 +14,7 @@ bot = commands.Bot(
     case_insensitive=True,
 )
 @bot.event
-async def on_command_error(self, ctx, error):
+async def on_command_error(ctx, error):
     await ctx.send(traceback.format_exception(error))
   
 bot.load_extension("onami")
