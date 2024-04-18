@@ -50,11 +50,11 @@ class BonkView(nextcord.ui.View):
 #    def update_msg(self, msg: nextcord.Message):
 #        self.message = msg
 
-    @nextcord.ui.button("Generate a new one?", style=nextcord.ButtonStyle.green)
-    async def _generator(
-            self, button: nextcord.ui.Button, interaction: nextcord.Interaction
-            ):
-        ...
+#    @nextcord.ui.button("Generate a new one?", style=nextcord.ButtonStyle.green)
+#    async def _generator(
+#            self, button: nextcord.ui.Button, interaction: nextcord.Interaction
+#            ):
+#        ...
 
 
 
