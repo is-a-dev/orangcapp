@@ -10,6 +10,7 @@ bot = commands.Bot(
     intents=Intents.all(),
     command_prefix="oc/",
     help_command=commands.DefaultHelpCommand(),
+    case_insensitive=True,
 )
 bot.load_extension("onami")
 bot.load_extension("extensions.fun")
