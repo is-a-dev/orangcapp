@@ -47,7 +47,7 @@ class SlapView(nextcord.ui.View):
     def __init__(self, *, invitation: _BattleInvitation, ctx: commands.Context):
         super().__init__()
         self._invitation = invitation
-        self._ctx = _ctx
+        self._ctx = ctx
         self._message: Optional[nextcord.Message] = None
         self._user_1_count = 0
         self._user_2_count = 0
@@ -155,6 +155,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.is_owner()
     async def slappy(self, ctx: commands.Context, *, user: nextcord.Member):
         inv = _BattleInvitation(ctx.author.id, user.id)
         await ctx.send(f"<@{int(user.id)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.", allowed_mentions=nextcord.AllowedMentions.none(), view=SlapConfirmView(ctx, inv))
@@ -163,7 +164,7 @@ class Fun(commands.Cog):
         def check(m: _BattleInvitation):
             return m.id == inv.id
         await ctx.bot.wait_for("battle_acceptance", check=check, timeout=60)
-        k = SlapView(inv, ctx)
+        k = SlapView(invitation=inv, ctx=ctx)
         end = datetime.datetime.now() + datetime.timedelta(seconds=90)
         i = await ctx.send(f"<@{int(inv.uid1)}> and <@{inv.uid2}> has gone for a Slappy Slappy game. Press the button to score. This game ends in {nextcord.utils.format_dt(end, style='R')}.", allowed_mentions=nextcord.AllowedMentions.none(), view=k)
         await k.wait()

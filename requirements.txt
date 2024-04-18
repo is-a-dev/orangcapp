@@ -2,3 +2,4 @@ psl-dns
 nextcord
 python-dotenv
 onami
+aiohttp
