@@ -40,7 +40,7 @@ class SlapConfirmView(nextcord.ui.View):
     async def _confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         if self._invitation.uid2 == interaction.user.id:
             await self._ctx.send("Player 2 has accepted the Slappy Slappy battle.")
-            self._ctx.bot.dispatch("battle_acceptance", _invitation)
+            self._ctx.bot.dispatch("battle_acceptance", self._invitation)
         else:
             await interaction.send("You are not the invited competitor!", ephemeral=True)
 
