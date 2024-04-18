@@ -163,7 +163,7 @@ class Fun(commands.Cog):
 
         def check(m: _BattleInvitation):
             return m == inv
-        await _ctx.bot.wait_for("battle_acceptance", check=check, timeout=60)
+        await ctx.bot.wait_for("battle_acceptance", check=check, timeout=60)
         k = SlapView(inv, ctx)
         end = datetime.datetime.now() + datetime.timedelta(seconds=90)
         i = await ctx.send(f"<@{int(inv.uid1)}> and <@{inv.uid2}> has gone for a Slappy Slappy game. Press the button to score. This game ends in {nextcord.utils.format_dt(end, style='R')}.", allowed_mentions=nextcord.AllowedMentions.none(), view=k)
