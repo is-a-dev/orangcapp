@@ -17,6 +17,17 @@ Remember, a watched pot never boils, so why don't get your other work done and m
 Maintainers shouldn't be spending all their time merging PRs and neither should you spend all your time waiting for it.
 """
 
+rtfm = """
+Please read the damned docs. It exists for a reason.\n
+Our maintainers and helpers are volunteers. It's not our job to answer stupid questions already answered in the documentation or FAQ.\n
+- [is-a.dev documentation](https://is-a.dev/docs)\n
+- <#991779321758896258>\n
+"""
+domservice = """
+is-a.dev can give you support with your ***domain***, and that's provided you've read the [documentation](https://is-a.dev/docs).\n
+We do __not__ provide support for anything else. We aren't an HTML boot camp, it's not our job to teach you JSON. And we don't provide support for Github or DNS questions either. 
+"""
+
 
 class Tags(commands.Cog):
     def __init__(self, bot):
@@ -44,7 +55,26 @@ class Tags(commands.Cog):
                 color=nextcord.Colour.red(),
             )
             await ctx.send(embed=embed)
+    
+    @commands.command()
+    async def rtfm(self, ctx):
+        if True:
+            embed = nextcord.Embed(
+                title="Read The Fucking Manual",
+                description=rtfm,
+                color=nextcord.Colour.red(),
+            )
+            await ctx.send(embed=embed)
 
+    @commands.command()
+    async def domservice(self, ctx):
+        if True:
+            embed = nextcord.Embed(
+                title="We're a domain service, and we provide support for domains",
+                description=domservice,
+                color=nextcord.Colour.red(),
+            )
+            await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Tags(bot))
