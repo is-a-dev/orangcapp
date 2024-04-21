@@ -147,7 +147,7 @@ class TagsNew(commands.Cog):
     async def tag(self, ctx: commands.Context):
         pass
 
-    @tag.command():
+    @tag.command()
     async def list(self, ctx: commands.Context):
         with self._db.cursor() as cursor:
             cursor.execute("SELECT name FROM taginfo")
