@@ -147,6 +147,12 @@ class TagsNew(commands.Cog):
     async def tag(self, ctx: commands.Context):
         pass
 
+    @tag.command(self, ctx: commands.Context):
+    async def list(self, ctx: commands.Context):
+        with self._db.cursor() as cursor:
+            cursor.execute("SELECT name FROM taginfo")
+            await ctx.send(cursor.fetchall())
+
     @commands.command()
     async def find(self, ctx: commands.Context, tag_name: str = "null"):
         # print("command found")
