@@ -3,3 +3,4 @@ nextcord
 python-dotenv
 onami
 aiohttp
+psycopg2-binary

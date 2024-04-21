@@ -21,6 +21,7 @@ async def on_command_error(ctx, error):
   
 bot.load_extension("onami")
 bot.load_extension("extensions.fun")
-bot.load_extension("extensions.tags")
+if os.getenv("HASDB"):
+    bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
 bot.run(environ["TOKEN"])

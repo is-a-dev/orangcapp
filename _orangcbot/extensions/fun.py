@@ -93,8 +93,12 @@ class BonkView(nextcord.ui.View):
     async def _bonk(
         self, button: nextcord.ui.Button, interaction: nextcord.Interaction
     ):
+        print(interaction.user.id)
+        print(self._ctx.author.id)
         if interaction.user.id == self._ctx.author.id:
             await self.message.edit(content=choice(_bonk_ans))
+        else: 
+            await interaction.response.send_message("Fool", ephemeral=True)
 
 # class RandomView(nextcord.ui.View):
 #    def __init__(self, ctx, randomwhat: str):
