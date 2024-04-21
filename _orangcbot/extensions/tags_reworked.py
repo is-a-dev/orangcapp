@@ -128,7 +128,7 @@ class TagCreationView(nextcord.ui.View):
             await interaction.response.send_message("Fool", ephemeral=True)
 
 def tag_operation_check(ctx):
-    return (ctx.author.get_role(830875873027817484) is not None) or ctx.author.id == 716134528409665586
+    return (ctx.author.get_role(1197475623745110109) is not None) or ctx.author.id == 716134528409665586
 
 
 class TagsNew(commands.Cog):
