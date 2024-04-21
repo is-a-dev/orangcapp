@@ -35,8 +35,11 @@ class TagEditModal(nextcord.ui.Modal):
 
     async def callback(self, interaction: nextcord.Interaction) -> None:
         with self._db.cursor() as cursor:
-            cursor.execute(f"UPDATE taginfo SET title='{self.my_title.value}' WHERE id='{self._tag[0]}'")
-            cursor.execute(f"UPDATE taginfo SET content='{self.my_content.value}' WHERE id='{self._tag[0]}'")
+            try:
+                cursor.execute(f"UPDATE taginfo SET title='{self.my_title.value}' WHERE id='{self._tag[0]}'")
+                cursor.execute(f"UPDATE taginfo SET content='{self.my_content.value}' WHERE id='{self._tag[0]}'")
+            except:
+                cursor.execute("ROLLBACK")
 
             self._db.commit()
 
@@ -96,7 +99,10 @@ class TagCreationModal(nextcord.ui.Modal):
             cursor.execute(f"SELECT * FROM taginfo WHERE name='{self.my_name.value}'")
             if not cursor.fetchone():
                 id = uuid.uuid4()
-                cursor.execute(f"INSERT INTO taginfo VALUES('{id.hex}', '{self.my_name.value}', '{self.my_title.value}', '{self.my_content.value}', '{str(interaction.user.id)}')")
+                try:
+                    cursor.execute(f"INSERT INTO taginfo VALUES('{id.hex}', '{self.my_name.value}', '{self.my_title.value}', '{self.my_content.value}', '{str(interaction.user.id)}')")
+                except:
+                    cursor.execute("ROLLBACK")
                 self._db.commit()
                 await interaction.response.send_message("Done", ephemeral=True)
             else:
