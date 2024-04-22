@@ -16,6 +16,7 @@ from typing import Optional
 from random import choice
 
 _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
+_morals = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
 # _randommer_api_key = os.getenv("RANDOMMER_API_KEY")
 # def has_randommer_api_key():
 #    async def predicate(ctx: comamnds.Context):
@@ -198,6 +199,19 @@ class Fun(commands.Cog):
             allowed_mentions=nextcord.AllowedMentions.none(),
             view=k,
         )
+
+    @commands.command()
+    async def moral(self, ctx: commands.Context, member: Optional[nextcord.Member] = None) -> None:
+        if not member: member = ctx.author
+        if member.id == 716134528409665586:
+            state = "Paragon of Virtue"
+        elif member.id == 961063229168164864:
+            state = "Degenerate"
+        else:
+            state = choice(_morals)
+
+        await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")
+
 
 
 def setup(bot):
