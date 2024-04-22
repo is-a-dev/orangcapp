@@ -1,5 +1,5 @@
-from nextcord.ext import commands
 import nextcord
+from nextcord.ext import commands
 
 
 class Testings(commands.Cog):

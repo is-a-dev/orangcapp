@@ -1,11 +1,11 @@
 from __future__ import annotations
-from nextcord.ext import commands
-import nextcord
 
-from dotenv import load_dotenv
-
-import psycopg2
 import uuid
+
+import nextcord
+import psycopg2
+from dotenv import load_dotenv
+from nextcord.ext import commands
 
 load_dotenv()
 from os import getenv

@@ -1,12 +1,14 @@
 from os import environ
+
 from dotenv import load_dotenv
 
 load_dotenv()
 import os
-import nextcord
 import traceback
-from nextcord.ext import commands
+
+import nextcord
 from nextcord import Intents
+from nextcord.ext import commands
 
 prefix = "oct/" if os.getenv("TEST") else "oc/"
 bot = commands.Bot(

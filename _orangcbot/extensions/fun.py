@@ -1,20 +1,18 @@
+import aiohttp
+import dotenv
+import nextcord
 from nextcord.ext import commands
 from psl_dns import PSL
-import nextcord
-import aiohttp
-
-import dotenv
 
 dotenv.load_dotenv()
-import datetime
-
 # import os
 import asyncio
+import datetime
 
 _psl = PSL()
-from typing import Optional
-from random import choice
 import random
+from random import choice
+from typing import Optional
 
 _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
 _morals = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
@@ -134,6 +132,7 @@ class BonkView(nextcord.ui.View):
 
 # import copy
 
+
 class Fun(commands.Cog):
     def __init__(self, bot):
         self._bot = bot
@@ -203,8 +202,11 @@ class Fun(commands.Cog):
         )
 
     @commands.command()
-    async def moral(self, ctx: commands.Context, member: Optional[nextcord.Member] = None) -> None:
-        if not member: member = ctx.author
+    async def moral(
+        self, ctx: commands.Context, member: Optional[nextcord.Member] = None
+    ) -> None:
+        if not member:
+            member = ctx.author
         if member.id in (716134528409665586, 599998971707916299):
             state = "Paragon of Virtue"
         # elif member.id == 599998971707916299:
@@ -218,15 +220,17 @@ class Fun(commands.Cog):
         await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")
 
     @commands.command()
-    async def fool(self, ctx: commands.Context, member: Optional[nextcord.Member] = None) -> None:
-        if not member: member = ctx.author
+    async def fool(
+        self, ctx: commands.Context, member: Optional[nextcord.Member] = None
+    ) -> None:
+        if not member:
+            member = ctx.author
         if member.id == 716134528409665586:
             level = 0
         else:
             level = random.randint(0, 100)
 
         await ctx.send(f"**{member.display_name}** is {level}% a fool.")
-
 
 
 def setup(bot):
