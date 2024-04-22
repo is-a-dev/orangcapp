@@ -14,6 +14,7 @@ import asyncio
 _psl = PSL()
 from typing import Optional
 from random import choice
+import random
 
 _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
 _morals = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
@@ -131,7 +132,7 @@ class BonkView(nextcord.ui.View):
 #            ):
 #        ...
 
-import copy
+# import copy
 
 class Fun(commands.Cog):
     def __init__(self, bot):
@@ -215,6 +216,16 @@ class Fun(commands.Cog):
             state = choice(_morals)
 
         await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")
+
+    @commands.command()
+    async def fool(self, ctx: commands.Context, member: Optional[nextcord.Member] = None) -> None:
+        if not member: member = ctx.author
+        if member.id == 716134528409665586:
+            level = 0
+        else:
+            level = random.randint(0, 100)
+
+        await ctx.send(f"**{member.display_name}** is {level}% a fool.")
 
 
 
