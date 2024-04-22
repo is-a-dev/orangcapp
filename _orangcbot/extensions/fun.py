@@ -204,11 +204,11 @@ class Fun(commands.Cog):
     @commands.command()
     async def moral(self, ctx: commands.Context, member: Optional[nextcord.Member] = None) -> None:
         if not member: member = ctx.author
-        if member.id == 716134528409665586:
+        if member.id in (716134528409665586, 599998971707916299):
             state = "Paragon of Virtue"
-        elif member.id == 599998971707916299:
-            moral_edited = copy.copy(_morals).append("Paragon of Virtue")
-            state = choice(moral_edited)
+        # elif member.id == 599998971707916299:
+        #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
+        #     state = choice(moral_edited)
         elif member.id == 961063229168164864:
             state = "Degenerate"
         else:
