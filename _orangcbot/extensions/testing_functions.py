@@ -1,6 +1,7 @@
 from nextcord.ext import commands
 import nextcord
 
+
 class Testings(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self._bot: commands.Bot = bot
@@ -8,7 +9,7 @@ class Testings(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def hinder(self, ctx: commands.Context, cmd: str):
-        if cmd == "hinder": 
+        if cmd == "hinder":
             await ctx.send("I did not expect you to be such a fool")
         else:
             cmd = await self._bot.get_command(cmd)

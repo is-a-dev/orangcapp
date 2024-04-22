@@ -4,10 +4,13 @@ import nextcord
 import aiohttp
 
 import dotenv
+
 dotenv.load_dotenv()
 import datetime
+
 # import os
 import asyncio
+
 _psl = PSL()
 from typing import Optional
 from random import choice
@@ -19,6 +22,7 @@ _bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
 #        return _randommer_api_key != None
 #    return commands.check(predicate)
 
+
 # async def _request_randommer(*, params, path):
 #    async with aiohttp.ClientSession() as session:
 #        async with session.get(f"https://randommer.io/api/{path}", params=params, headers={"X-Api-Key": _randommer_api_key}) as response:
@@ -29,6 +33,7 @@ class _BattleInvitation:
         self.uid1: int = uid1
         self.uid2: int = uid2
 
+
 class SlapConfirmView(nextcord.ui.View):
     def __init__(self, ctx: commands.Context, invitation: _BattleInvitation):
         super().__init__()
@@ -36,12 +41,17 @@ class SlapConfirmView(nextcord.ui.View):
         self._invitation: _BattleInvitation = invitation
 
     @nextcord.ui.button(label="Confirm Battle", style=nextcord.ButtonStyle.blurple)
-    async def _confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+    async def _confirm(
+        self, button: nextcord.ui.Button, interaction: nextcord.Interaction
+    ):
         if self._invitation.uid2 == interaction.user.id:
             await self._ctx.send("Player 2 has accepted the Slappy Slappy battle.")
             self._ctx.bot.dispatch("battle_acceptance", self._invitation)
         else:
-            await interaction.send("You are not the invited competitor!", ephemeral=True)
+            await interaction.send(
+                "You are not the invited competitor!", ephemeral=True
+            )
+
 
 class SlapView(nextcord.ui.View):
     def __init__(self, *, invitation: _BattleInvitation, ctx: commands.Context):
@@ -51,8 +61,7 @@ class SlapView(nextcord.ui.View):
         self._message: Optional[nextcord.Message] = None
         self._user_1_count = 0
         self._user_2_count = 0
-        
-    
+
     async def timeout(self):
         asyncio.sleep(90)
         self.children[0].disabled = True
@@ -62,10 +71,16 @@ class SlapView(nextcord.ui.View):
         self.message = message
 
     def determine_winner(self):
-        return self._invitation.uid1 if self._user_1_count > self._user_2_count else self._invitation.uid2
+        return (
+            self._invitation.uid1
+            if self._user_1_count > self._user_2_count
+            else self._invitation.uid2
+        )
 
     @nextcord.ui.button(label="Slap!", style=nextcord.ButtonStyle.red)
-    async def _slap(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+    async def _slap(
+        self, button: nextcord.ui.Button, interaction: nextcord.Interaction
+    ):
         if interaction.user.id == self._invitation.uid1:
             self._user_1_count += 1
             await interaction.response.defer()
@@ -73,13 +88,11 @@ class SlapView(nextcord.ui.View):
             self._user_2_count += 1
             await interaction.response.defer()
         else:
-            await interaction.response.send_message("You are not a competitor.", ephemeral=True)
+            await interaction.response.send_message(
+                "You are not a competitor.", ephemeral=True
+            )
 
-    
 
-
-        
-        
 class BonkView(nextcord.ui.View):
     def __init__(self, ctx):
         super().__init__()
@@ -97,8 +110,9 @@ class BonkView(nextcord.ui.View):
         print(self._ctx.author.id)
         if interaction.user.id == self._ctx.author.id:
             await self.message.edit(content=choice(_bonk_ans))
-        else: 
+        else:
             await interaction.response.send_message("Fool", ephemeral=True)
+
 
 # class RandomView(nextcord.ui.View):
 #    def __init__(self, ctx, randomwhat: str):
@@ -117,8 +131,6 @@ class BonkView(nextcord.ui.View):
 #        ...
 
 
-
-
 class Fun(commands.Cog):
     def __init__(self, bot):
         self._bot = bot
@@ -135,7 +147,7 @@ class Fun(commands.Cog):
             await ctx.send("Yes, we are.")
         else:
             await ctx.send("No, we aren't.")
-    
+
     @commands.command()
     async def ubdict(self, ctx: commands.Context, *, word: str):
         """contributed by vaibhav"""
@@ -162,22 +174,30 @@ class Fun(commands.Cog):
     @commands.is_owner()
     async def slappy(self, ctx: commands.Context, *, user: nextcord.Member):
         inv = _BattleInvitation(ctx.author.id, user.id)
-        await ctx.send(f"<@{int(user.id)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.", allowed_mentions=nextcord.AllowedMentions.none(), view=SlapConfirmView(ctx, inv))
-
+        await ctx.send(
+            f"<@{int(user.id)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.",
+            allowed_mentions=nextcord.AllowedMentions.none(),
+            view=SlapConfirmView(ctx, inv),
+        )
 
         def check(m: _BattleInvitation):
             return m.id == inv.id
+
         await ctx.bot.wait_for("battle_acceptance", check=check, timeout=60)
         k = SlapView(invitation=inv, ctx=ctx)
         end = datetime.datetime.now() + datetime.timedelta(seconds=90)
-        i = await ctx.send(f"<@{int(inv.uid1)}> and <@{inv.uid2}> has gone for a Slappy Slappy game. Press the button to score. This game ends in {nextcord.utils.format_dt(end, style='R')}.", allowed_mentions=nextcord.AllowedMentions.none(), view=k)
+        i = await ctx.send(
+            f"<@{int(inv.uid1)}> and <@{inv.uid2}> has gone for a Slappy Slappy game. Press the button to score. This game ends in {nextcord.utils.format_dt(end, style='R')}.",
+            allowed_mentions=nextcord.AllowedMentions.none(),
+            view=k,
+        )
         await k.wait()
         winner = k.determine_winner()
-        await i.edit(f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappt game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.", allowed_mentions=nextcord.AllowedMentions.none(), view=k)
-
-        
-
-
+        await i.edit(
+            f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappt game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.",
+            allowed_mentions=nextcord.AllowedMentions.none(),
+            view=k,
+        )
 
 
 def setup(bot):

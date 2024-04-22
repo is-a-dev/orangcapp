@@ -55,7 +55,7 @@ class Tags(commands.Cog):
                 color=nextcord.Colour.red(),
             )
             await ctx.send(embed=embed)
-    
+
     @commands.command()
     async def rtfm(self, ctx):
         if True:
@@ -75,6 +75,7 @@ class Tags(commands.Cog):
                 color=nextcord.Colour.red(),
             )
             await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Tags(bot))
