@@ -207,7 +207,7 @@ class Fun(commands.Cog):
         if member.id == 716134528409665586:
             state = "Paragon of Virtue"
         elif member.id == 599998971707916299:
-            moral_edited = copy.copy(_morals).append("Paragon of Virtue")
+            moral_edited = _morals.append("Paragon of Virtue")
             state = random.choice(moral_edited)
         elif member.id == 961063229168164864:
             state = "Degenerate"
