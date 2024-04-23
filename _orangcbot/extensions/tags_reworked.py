@@ -10,6 +10,7 @@ import uuid
 load_dotenv()
 from os import getenv
 
+# if you are asking why there's a "my_" before the values, then it's because self.title overlaps the value in modal
 
 class TagEditModal(nextcord.ui.Modal):
     def __init__(self, db: psycopg2.connection, tag_info: tuple):
