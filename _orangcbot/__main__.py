@@ -8,8 +8,23 @@ import traceback
 from nextcord.ext import commands
 from nextcord import Intents
 
+
 prefix = "oct/" if os.getenv("TEST") else "oc/"
-bot = commands.Bot(
+
+class OrangcBot(commands.Bot):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+    async def on_command_error(self, context: commands.Context, error: Exception) -> None:
+        if isinstance(error, commands.NotOwner):
+            await context.send("Impersonator")
+        elif isinstance(error, commands.UserInputError):
+            await context.send("Such a fool can't read help")
+        else:
+            await context.send("Fool")
+            await super().on_command_error(context, error)
+
+bot = OrangcBot(
     intents=Intents.all(),
     command_prefix=prefix,
     help_command=commands.DefaultHelpCommand(),
