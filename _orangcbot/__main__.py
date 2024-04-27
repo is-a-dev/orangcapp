@@ -37,7 +37,7 @@ class OrangcBot(commands.Bot):
     async def on_message(self, message: nextcord.Message) -> None:
         if not os.getenv("HASDB"): return
         if os.getenv("NO_SPAWN_TAG"): return 
-        if message.content.startswith("%"):
+        if message.content.startswith("^"):
             with self._db.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM taginfo\nWHERE name='{message.content[1:]}'")
                 if info := cursor.fetchone():
