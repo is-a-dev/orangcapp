@@ -1,3 +1,4 @@
+from __future__ import annotations
 from nextcord.ext import commands
 from psl_dns import PSL
 import nextcord
@@ -12,12 +13,12 @@ import datetime
 import asyncio
 
 _psl = PSL()
-from typing import Optional
+from typing import Optional, List, TYPE_CHECKING
 from random import choice
 import random
 
-_bonk_ans = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
-_morals = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
+_bonk_ans: List[str] = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
+_morals: List[str] = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
 # _randommer_api_key = os.getenv("RANDOMMER_API_KEY")
 # def has_randommer_api_key():
 #    async def predicate(ctx: comamnds.Context):
@@ -30,8 +31,8 @@ _morals = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
 #        async with session.get(f"https://randommer.io/api/{path}", params=params, headers={"X-Api-Key": _randommer_api_key}) as response:
 #            return await response.json()
 class _BattleInvitation:
-    def __init__(self, uid1, uid2):
-        self.id = str(uid1) + str(uid2)
+    def __init__(self, uid1: int, uid2: int):
+        self.id: str = str(uid1) + str(uid2)
         self.uid1: int = uid1
         self.uid2: int = uid2
 
@@ -56,20 +57,23 @@ class SlapConfirmView(nextcord.ui.View):
 
 
 class SlapView(nextcord.ui.View):
+    if TYPE_CHECKING:
+        _message: Optional[nextcord.Message]
+
     def __init__(self, *, invitation: _BattleInvitation, ctx: commands.Context):
         super().__init__()
         self._invitation = invitation
-        self._ctx = ctx
+        self._ctx: commands.Context = ctx
         self._message: Optional[nextcord.Message] = None
-        self._user_1_count = 0
-        self._user_2_count = 0
+        self._user_1_count: int = 0
+        self._user_2_count: int = 0
 
     async def timeout(self):
         asyncio.sleep(90)
         self.children[0].disabled = True
         self.stop()
 
-    def set_message(self, message):
+    def set_message(self, message: nextcord.Message):
         self.message = message
 
     def determine_winner(self):
@@ -96,9 +100,11 @@ class SlapView(nextcord.ui.View):
 
 
 class BonkView(nextcord.ui.View):
-    def __init__(self, ctx):
+    if TYPE_CHECKING:
+        message: Optional[nextcord.Message]
+    def __init__(self, ctx: commands.Context):
         super().__init__()
-        self._ctx = ctx
+        self._ctx: commands.Context = ctx
         self.message: Optional[nextcord.Message] = None
 
     def update_msg(self, msg: nextcord.Message):
@@ -108,8 +114,8 @@ class BonkView(nextcord.ui.View):
     async def _bonk(
         self, button: nextcord.ui.Button, interaction: nextcord.Interaction
     ):
-        print(interaction.user.id)
-        print(self._ctx.author.id)
+        # print(interaction.user.id)
+        # print(self._ctx.author.id)
         if interaction.user.id == self._ctx.author.id:
             await self.message.edit(content=choice(_bonk_ans))
         else:
@@ -133,6 +139,11 @@ class BonkView(nextcord.ui.View):
 #        ...
 
 # import copy
+
+async def request(*args, **kwargs):
+    async with aiohttp.ClientSession() as session:
+        async with session.request(*args, **kwargs) as ans:
+            return ans
 
 class Fun(commands.Cog):
     def __init__(self, bot):
@@ -227,7 +238,11 @@ class Fun(commands.Cog):
 
         await ctx.send(f"**{member.display_name}** is {level}% a fool.")
 
-
+    @commands.command()
+    async def imbored(self, ctx: commands.Context):
+        raw_resp = await request("GET", "http://www.boredapi.com/api/activity/")
+        response = await raw_resp.json()
+        await ctx.send(f"You should probably **{response['activity']}** to occupy yourself.")
 
 def setup(bot):
     bot.add_cog(Fun(bot))
