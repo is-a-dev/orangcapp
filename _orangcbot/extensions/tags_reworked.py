@@ -157,9 +157,21 @@ class TagsNew(commands.Cog):
             dbname=getenv("DBNAME"),
         )
 
-    @commands.group()
-    async def tag(self, ctx: commands.Context):
-        pass
+    @commands.group(invoke_without_command=True)
+    async def tag(self, ctx: commands.Context, tag_name: str = "null"):
+        with self._db.cursor() as cursor:
+            cursor.execute(f"SELECT * FROM taginfo\nWHERE name='{tag_name}'")
+            if info := cursor.fetchone():
+                # print(info)
+                await ctx.send(
+                    embed=nextcord.Embed(
+                        title=info[2], description=info[3], color=nextcord.Color.red()
+                    ).set_footer(text=f"ID {info[0]}. Author ID: {info[4]}")
+                )
+            else:
+                await ctx.send("Fool")
+
+
 
     @tag.command()
     async def list(self, ctx: commands.Context):
