@@ -143,7 +143,7 @@ class BonkView(nextcord.ui.View):
 async def request(*args, **kwargs):
     async with aiohttp.ClientSession() as session:
         async with session.request(*args, **kwargs) as ans:
-            return ans
+            return await ans.json()
 
 class Fun(commands.Cog):
     def __init__(self, bot):
@@ -240,8 +240,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def imbored(self, ctx: commands.Context):
-        raw_resp = await request("GET", "http://www.boredapi.com/api/activity/")
-        response = await raw_resp.json()
+        response = await request("GET", "http://www.boredapi.com/api/activity/")
         await ctx.send(f"You should probably **{response['activity']}** to occupy yourself.")
 
 def setup(bot):
