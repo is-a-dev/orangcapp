@@ -4,6 +4,7 @@ import uuid
 
 import nextcord
 import psycopg2
+from nextcord.ext import application_checks
 from dotenv import load_dotenv
 from nextcord.ext import commands
 
@@ -155,6 +156,85 @@ def tag_operation_check(ctx):
         ctx.author.get_role(1197475623745110109) is not None
     ) or ctx.author.id == 716134528409665586
 
+class TagsNewSlash(commands.Cog):
+    def __init__(self, bot: commands.Bot):
+        self._bot: commands.Bot = bot
+        self._db = psycopg2.connection = psycopg2.connect(
+            host=getenv("DBHOST"),
+            user=getenv("DBUSER"),
+            port=getenv("DBPORT"),
+            password=getenv("DBPASSWORD"),
+            dbname=getenv("DBNAME"),
+        )
+
+    @nextcord.slash_command()
+    async def tag(self, interaction: nextcord.Interaction) -> None:
+        pass
+    
+    @tag.subcommand()
+    @application_checks.has_role(1197475623745110109)
+    async def create(self, interaction: nextcord.Interaction) -> None:
+        await interaction.response.send_modal(TagCreationModal(self._db))
+    
+    @tag.subcommand()
+    @application_checks.has_role(1197475623745110109)
+    async def edit(
+            self,
+            interaction: nextcord.Interaction,
+            tag_name: str = nextcord.SlashOption(
+                description="The tag you want",
+                required=True,
+            ),
+        ) -> None:
+        """Edit a tag"""
+        with self._db.cursor() as cursor:
+            cursor.execute("SELECT * FROM taginfo\nWHERE name=%s", (tag_name,))
+            if info := cursor.fetchone():
+                await interaction.response.send_modal(TagEditModal(self._db, info))
+            else:
+                await interaction.response.send_message("Invalid tag", ephemeral=True)
+
+    @tag.subcommand()
+    async def find(
+            self,
+            interaction: nextcord.Interaction,
+            tag_name: str = nextcord.SlashOption(
+                description="The tag you want",
+                required=True,
+            ),
+            ) -> None:
+        """Request a tag"""
+        with self._db.cursor() as cursor:
+            cursor.execute("SELECT * FROM taginfo\nWHERE name=%s", (tag_name,))
+            if info := cursor.fetchone():
+                # print(info)
+                await interaction.send(
+                    embed=nextcord.Embed(
+                        title=info[2], description=info[3], color=nextcord.Color.red()
+                    ).set_footer(text=f"ID {info[0]}. Author ID: {info[4]}")
+                )
+            else:
+                await interaction.send("Fool")
+
+    @tag.subcommand()
+    async def delete(
+            self,
+            interaction: nextcord.Interaction,
+            tag_name: str = nextcord.SlashOption(
+                description="The tag you want",
+                required=True),
+        ) -> None:
+        """Delete a tag"""
+        with self._db.cursor() as cursor:
+            cursor.execute("SELECT * FROM taginfo WHERE name=%s", (tag_name,))
+            if info := cursor.fetchone():
+                cursor.execute("DELETE FROM taginfo WHERE name=%s", (tag_name,))
+                self._db.commit()
+                await interaction.send("Done")
+            else:
+                await interaction.send("Fool")
+
+
 
 class TagsNew(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -235,3 +315,4 @@ class TagsNew(commands.Cog):
 
 def setup(bot):
     bot.add_cog(TagsNew(bot))
+    bot.add_cog(TagsNewSlash(bot))
