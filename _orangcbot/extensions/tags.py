@@ -1,6 +1,5 @@
-from nextcord.ext import commands
-
 import nextcord
+from nextcord.ext import commands
 
 nohelp = """
 Hey you! This is not a help channel!\n
@@ -25,7 +24,7 @@ Our maintainers and helpers are volunteers. It's not our job to answer stupid qu
 """
 domservice = """
 is-a.dev can give you support with your ***domain***, and that's provided you've read the [documentation](https://is-a.dev/docs).\n
-We do __not__ provide support for anything else. We aren't an HTML boot camp, it's not our job to teach you JSON. And we don't provide support for Github or DNS questions either. 
+We do __not__ provide support for anything else. We aren't an HTML boot camp, it's not our job to teach you JSON. And we don't provide support for Github or DNS questions either.
 """
 
 

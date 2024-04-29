@@ -1,16 +1,20 @@
 from __future__ import annotations
+
 from os import environ, getenv
+
 from dotenv import load_dotenv
 
 load_dotenv()
 import os
-import nextcord
 import traceback
-from nextcord.ext import commands
-from nextcord import Intents
+
+import nextcord
 import psycopg2
+from nextcord import Intents
+from nextcord.ext import commands
 
 prefix = "oct/" if os.getenv("TEST") else "oc/"
+
 
 class OrangcBot(commands.Bot):
     def __init__(self, *args, **kwargs) -> None:
@@ -23,7 +27,9 @@ class OrangcBot(commands.Bot):
         )
         super().__init__(*args, **kwargs)
 
-    async def on_command_error(self, context: commands.Context, error: Exception) -> None:
+    async def on_command_error(
+        self, context: commands.Context, error: Exception
+    ) -> None:
         if isinstance(error, commands.NotOwner):
             await context.send("Impersonator")
         elif isinstance(error, commands.UserInputError):
@@ -35,25 +41,32 @@ class OrangcBot(commands.Bot):
             await super().on_command_error(context, error)
 
     async def on_message(self, message: nextcord.Message) -> None:
-        # Those lines placed here may block normal message 
+        # Those lines placed here may block normal message
         # if not os.getenv("HASDB"): return
-        # if os.getenv("NO_SPAWN_TAG"): return 
+        # if os.getenv("NO_SPAWN_TAG"): return
         if message.content.startswith("^"):
-            if os.getenv("NO_SPAWN_TAG"): return
-            if not os.getenv("HASDB"): return
+            if os.getenv("NO_SPAWN_TAG"):
+                return
+            if not os.getenv("HASDB"):
+                return
             with self._db.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM taginfo\nWHERE name='{message.content[1:]}'")
+                cursor.execute(
+                    f"SELECT * FROM taginfo\nWHERE name='{message.content[1:]}'"
+                )
                 if info := cursor.fetchone():
                     # print(info)
                     await message.channel.send(
                         embed=nextcord.Embed(
-                            title=info[2], description=info[3], color=nextcord.Color.red()
+                            title=info[2],
+                            description=info[3],
+                            color=nextcord.Color.red(),
                         ).set_footer(text=f"ID {info[0]}. Author ID: {info[4]}")
                     )
                 else:
                     pass
         else:
             await super().on_message(message)
+
 
 bot = OrangcBot(
     intents=Intents.all(),

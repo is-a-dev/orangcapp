@@ -1,16 +1,17 @@
 from __future__ import annotations
-from nextcord.ext import commands
-import nextcord
 
-from dotenv import load_dotenv
-
-import psycopg2
 import uuid
+
+import nextcord
+import psycopg2
+from dotenv import load_dotenv
+from nextcord.ext import commands
 
 load_dotenv()
 from os import getenv
 
 # if you are asking why there's a "my_" before the values, then it's because self.title overlaps the value in modal
+
 
 class TagEditModal(nextcord.ui.Modal):
     def __init__(self, db: psycopg2.connection, tag_info: tuple):
@@ -40,10 +41,12 @@ class TagEditModal(nextcord.ui.Modal):
         with self._db.cursor() as cursor:
             try:
                 cursor.execute(
-                    f"UPDATE taginfo SET title='{self.my_title.value}' WHERE id='{self._tag[0]}'"
+                    "UPDATE taginfo SET title=%s WHERE id=%s",
+                    (self.my_title.value, self._tag[0]),
                 )
                 cursor.execute(
-                    f"UPDATE taginfo SET content='{self.my_content.value}' WHERE id='{self._tag[0]}'"
+                    "UPDATE taginfo SET content=%s WHERE id=%s",
+                    (self.my_content.value, self._tag[0]),
                 )
             except:
                 cursor.execute("ROLLBACK")
@@ -102,14 +105,21 @@ class TagCreationModal(nextcord.ui.Modal):
         self.add_item(self.my_content)
 
     async def callback(self, interaction: nextcord.Interaction) -> None:
-
         with self._db.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM taginfo WHERE name='{self.my_name.value}'")
+            cursor.execute("SELECT * FROM taginfo WHERE name=%s", (self.my_name.value,))
             if not cursor.fetchone():
                 id = uuid.uuid4()
                 try:
                     cursor.execute(
-                        f"INSERT INTO taginfo VALUES('{id.hex}', '{self.my_name.value}', '{self.my_title.value}', '{self.my_content.value}', '{str(interaction.user.id)}')"
+                        # f"INSERT INTO taginfo VALUES('{id.hex}', '{self.my_name.value}', '{self.my_title.value}', '{self.my_content.value}', '{str(interaction.user.id)}')"
+                        f"INSERT INTO taginfo VALUES(%s, %s, %s, %s, %s)",
+                        (
+                            id.hex,
+                            self.my_name.value,
+                            self.my_title.value,
+                            self.my_content.value,
+                            str(interaction.user.id),
+                        ),
                     )
                 except:
                     cursor.execute("ROLLBACK")
@@ -160,7 +170,7 @@ class TagsNew(commands.Cog):
     @commands.group(invoke_without_command=True)
     async def tag(self, ctx: commands.Context, tag_name: str = "null"):
         with self._db.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM taginfo\nWHERE name='{tag_name}'")
+            cursor.execute("SELECT * FROM taginfo\nWHERE name=%s", (tag_name,))
             if info := cursor.fetchone():
                 # print(info)
                 await ctx.send(
@@ -170,8 +180,6 @@ class TagsNew(commands.Cog):
                 )
             else:
                 await ctx.send("Fool")
-
-
 
     @tag.command()
     async def list(self, ctx: commands.Context):
@@ -184,7 +192,7 @@ class TagsNew(commands.Cog):
         # print("command found")
         # print(tag_name)
         with self._db.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM taginfo\nWHERE name='{tag_name}'")
+            cursor.execute("SELECT * FROM taginfo\nWHERE name=%s", (tag_name,))
             if info := cursor.fetchone():
                 # print(info)
                 await ctx.send(
@@ -204,9 +212,9 @@ class TagsNew(commands.Cog):
     @commands.check(tag_operation_check)
     async def delete(self, ctx: commands.Context, tag_name: str):
         with self._db.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM taginfo WHERE name='{tag_name}'")
+            cursor.execute("SELECT * FROM taginfo WHERE name=%s", (tag_name,))
             if info := cursor.fetchone():
-                cursor.execute(f"DELETE FROM taginfo WHERE name='{tag_name}'")
+                cursor.execute("DELETE FROM taginfo WHERE name=%s", (tag_name,))
                 self._db.commit()
                 await ctx.send("Done")
             else:
@@ -216,7 +224,7 @@ class TagsNew(commands.Cog):
     @commands.check(tag_operation_check)
     async def edit(self, ctx: commands.Context, tag_name: str):
         with self._db.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM taginfo WHERE name='{tag_name}'")
+            cursor.execute("SELECT * FROM taginfo WHERE name=%s", (tag_name,))
             if info := cursor.fetchone():
                 await ctx.send(
                     f"Editing tag {tag_name}", view=TagEditView(ctx, self._db, info)
