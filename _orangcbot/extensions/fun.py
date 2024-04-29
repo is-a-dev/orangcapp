@@ -1,23 +1,27 @@
 from __future__ import annotations
+
+import aiohttp
+import dotenv
+import nextcord
 from nextcord.ext import commands
 from psl_dns import PSL
-import nextcord
-import aiohttp
-
-import dotenv
 
 dotenv.load_dotenv()
-import datetime
-
 # import os
 import asyncio
+import datetime
 
 _psl = PSL()
-from typing import Optional, List, TYPE_CHECKING
-from random import choice
 import random
+from random import choice
+from typing import TYPE_CHECKING, List, Optional
 
-_bonk_ans: List[str] = ["Ouch!", "It hurts!", "Ohh noooo", "Pleaseeeeeee don't hurt me..."]
+_bonk_ans: List[str] = [
+    "Ouch!",
+    "It hurts!",
+    "Ohh noooo",
+    "Pleaseeeeeee don't hurt me...",
+]
 _morals: List[str] = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
 # _randommer_api_key = os.getenv("RANDOMMER_API_KEY")
 # def has_randommer_api_key():
@@ -102,6 +106,7 @@ class SlapView(nextcord.ui.View):
 class BonkView(nextcord.ui.View):
     if TYPE_CHECKING:
         message: Optional[nextcord.Message]
+
     def __init__(self, ctx: commands.Context):
         super().__init__()
         self._ctx: commands.Context = ctx
@@ -140,10 +145,12 @@ class BonkView(nextcord.ui.View):
 
 # import copy
 
+
 async def request(*args, **kwargs):
     async with aiohttp.ClientSession() as session:
         async with session.request(*args, **kwargs) as ans:
             return await ans.json()
+
 
 class Fun(commands.Cog):
     def __init__(self, bot):
@@ -214,8 +221,11 @@ class Fun(commands.Cog):
         )
 
     @commands.command()
-    async def moral(self, ctx: commands.Context, member: Optional[nextcord.Member] = None) -> None:
-        if not member: member = ctx.author
+    async def moral(
+        self, ctx: commands.Context, member: Optional[nextcord.Member] = None
+    ) -> None:
+        if not member:
+            member = ctx.author
         if member.id == 716134528409665586:
             state = "Paragon of Virtue"
         # elif member.id == 599998971707916299:
@@ -229,8 +239,11 @@ class Fun(commands.Cog):
         await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")
 
     @commands.command()
-    async def fool(self, ctx: commands.Context, member: Optional[nextcord.Member] = None) -> None:
-        if not member: member = ctx.author
+    async def fool(
+        self, ctx: commands.Context, member: Optional[nextcord.Member] = None
+    ) -> None:
+        if not member:
+            member = ctx.author
         if member.id == 716134528409665586:
             level = 0
         else:
@@ -241,7 +254,10 @@ class Fun(commands.Cog):
     @commands.command()
     async def imbored(self, ctx: commands.Context):
         response = await request("GET", "http://www.boredapi.com/api/activity/")
-        await ctx.send(f"You should probably **{response['activity']}** to occupy yourself.")
+        await ctx.send(
+            f"You should probably **{response['activity']}** to occupy yourself."
+        )
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))
