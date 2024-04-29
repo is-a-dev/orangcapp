@@ -16,6 +16,11 @@ class Testings(commands.Cog):
             cmd.enabled = not cmd.enabled
             await ctx.send("Request satisfied, master.")
 
+    @commands.command()
+    @commands.is_owner()
+    async def test_owner_perm(self, ctx: commands.Context):
+        await ctx.send("Master, how can I help you?")
+
 
 def setup(bot: commands.Bot) -> None:
     bot.add_cog(Testings(bot))
