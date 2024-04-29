@@ -7,10 +7,11 @@ from nextcord.ext import commands
 from psl_dns import PSL
 
 dotenv.load_dotenv()
-# import os
-from os import getenv
 import asyncio
 import datetime
+
+# import os
+from os import getenv
 
 _psl = PSL()
 import random
@@ -242,8 +243,8 @@ class Fun(commands.Cog):
 
     @nextcord.user_command(name="See moral")
     async def see_moral(
-            self, interaction: nextcord.Interaction, member: nextcord.Member
-        ) -> None:
+        self, interaction: nextcord.Interaction, member: nextcord.Member
+    ) -> None:
         if member.id == 716134528409665586:
             state = "Paragon of Virtue"
         # elif member.id == 599998971707916299:
@@ -253,12 +254,16 @@ class Fun(commands.Cog):
             state = "Degenerate"
         else:
             state = choice(_morals)
-        await interaction.response.send_message(f"**{member.display_name}**'s moral status is **{state}**")
+        await interaction.response.send_message(
+            f"**{member.display_name}**'s moral status is **{state}**"
+        )
 
     @nextcord.slash_command()
     async def ping(self, interaction: nextcord.Interaction) -> None:
         """Am I alive?"""
-        await interaction.response.send_message("~uwu~ *blushes* h-hi? *strange egirl noise*")
+        await interaction.response.send_message(
+            "~uwu~ *blushes* h-hi? *strange egirl noise*"
+        )
 
     @commands.command()
     async def fool(
