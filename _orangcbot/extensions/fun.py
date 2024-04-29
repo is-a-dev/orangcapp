@@ -8,6 +8,7 @@ from psl_dns import PSL
 
 dotenv.load_dotenv()
 # import os
+from os import getenv
 import asyncio
 import datetime
 
@@ -23,6 +24,7 @@ _bonk_ans: List[str] = [
     "Pleaseeeeeee don't hurt me...",
 ]
 _morals: List[str] = ["Excellent", "Good", "Normal", "Bad", "Very bad"]
+MAIN_SERVER_GUILD_ID: Literal[830872854677422150] = 830872854677422150
 # _randommer_api_key = os.getenv("RANDOMMER_API_KEY")
 # def has_randommer_api_key():
 #    async def predicate(ctx: comamnds.Context):
@@ -237,6 +239,26 @@ class Fun(commands.Cog):
             state = choice(_morals)
 
         await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")
+
+    @nextcord.user_command(name="See moral")
+    async def see_moral(
+            self, interaction: nextcord.Interaction, member: nextcord.Member
+        ) -> None:
+        if member.id == 716134528409665586:
+            state = "Paragon of Virtue"
+        # elif member.id == 599998971707916299:
+        #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
+        #     state = choice(moral_edited)
+        elif member.id == 961063229168164864:
+            state = "Degenerate"
+        else:
+            state = choice(_morals)
+        await interaction.response.send_message(f"**{member.display_name}**'s moral status is **{state}**")
+
+    @nextcord.slash_command()
+    async def ping(self, interaction: nextcord.Interaction) -> None:
+        """Am I alive?"""
+        await interaction.response.send_message("~uwu~ *blushes* h-hi? *strange egirl noise*")
 
     @commands.command()
     async def fool(
