@@ -262,7 +262,7 @@ class Fun(commands.Cog):
     async def ping(self, interaction: nextcord.Interaction) -> None:
         """Am I alive?"""
         await interaction.response.send_message(
-            "~uwu~ *blushes* h-hi? *strange egirl noise*"
+            "No"
         )
 
     @commands.command()
