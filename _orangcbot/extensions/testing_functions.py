@@ -12,8 +12,8 @@ class Testings(commands.Cog):
         if cmd == "hinder":
             await ctx.send("I did not expect you to be such a fool")
         else:
-            cmd = await self._bot.get_command(cmd)
-            cmd.enabled = not cmd.enabled
+            command = self._bot.get_command(cmd)
+            command.enabled = not command.enabled
             await ctx.send("Request satisfied, master.")
 
     @commands.command()

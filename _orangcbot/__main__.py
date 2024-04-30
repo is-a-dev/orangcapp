@@ -36,6 +36,8 @@ class OrangcBot(commands.Bot):
             await context.send("Such a fool can't read help")
         elif isinstance(error, commands.CommandNotFound):
             await context.send("Imagine disillusioned")
+        elif isinstance(error, commands.errors.DisabledCommand):
+            await context.send("Shhhhhhhh")
         else:
             await context.send("Fool")
             await super().on_command_error(context, error)
@@ -84,6 +86,7 @@ bot.load_extension("onami")
 bot.load_extension("extensions.fun")
 bot.load_extension("extensions.faq")
 bot.load_extension("extensions.antiphishing")
+bot.load_extension("extensions.testing_functions")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
