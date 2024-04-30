@@ -83,6 +83,7 @@ bot = OrangcBot(
 bot.load_extension("onami")
 bot.load_extension("extensions.fun")
 bot.load_extension("extensions.faq")
+bot.load_extension("extensions.antiphishing")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
