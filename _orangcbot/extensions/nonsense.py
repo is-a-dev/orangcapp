@@ -71,7 +71,7 @@ class ReportDegenView(nextcord.ui.View):
         if interaction.user.id == self.message.author.id:
             await interaction.response.send_modal(ReportDegenModal())
         else:
-            await interaction.send("Fool")
+            await interaction.send("Fool", ephemeral=True)
 
 
 class Nonsense(commands.Cog):
