@@ -16,7 +16,7 @@ from os import getenv
 _psl = PSL()
 import random
 from random import choice
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Literal
 
 _bonk_ans: List[str] = [
     "Ouch!",
@@ -54,7 +54,7 @@ class SlapConfirmView(nextcord.ui.View):
     async def _confirm(
         self, button: nextcord.ui.Button, interaction: nextcord.Interaction
     ):
-        if self._invitation.uid2 == interaction.user.id:
+        if self._invitation.uid2 == interaction.user.id:  # type: ignore[reportOptionalMemberAccess]
             await self._ctx.send("Player 2 has accepted the Slappy Slappy battle.")
             self._ctx.bot.dispatch("battle_acceptance", self._invitation)
         else:
@@ -76,8 +76,8 @@ class SlapView(nextcord.ui.View):
         self._user_2_count: int = 0
 
     async def timeout(self):
-        asyncio.sleep(90)
-        self.children[0].disabled = True
+        await asyncio.sleep(90)
+        self.children[0].disabled = True  # type: ignore[reportAttributeAccessIssue]
         self.stop()
 
     def set_message(self, message: nextcord.Message):
@@ -94,10 +94,10 @@ class SlapView(nextcord.ui.View):
     async def _slap(
         self, button: nextcord.ui.Button, interaction: nextcord.Interaction
     ):
-        if interaction.user.id == self._invitation.uid1:
+        if interaction.user.id == self._invitation.uid1:  # type: ignore[reportOptionalMemberAccess]
             self._user_1_count += 1
             await interaction.response.defer()
-        if interaction.user.id == self._invitation.uid2:
+        if interaction.user.id == self._invitation.uid2:  # type: ignore[reportOptionalMemberAccess]
             self._user_2_count += 1
             await interaction.response.defer()
         else:
@@ -124,8 +124,8 @@ class BonkView(nextcord.ui.View):
     ):
         # print(interaction.user.id)
         # print(self._ctx.author.id)
-        if interaction.user.id == self._ctx.author.id:
-            await self.message.edit(content=choice(_bonk_ans))
+        if interaction.user.id == self._ctx.author.id:  # type: ignore[reportOptionalMemberAccess]
+            await self.message.edit(content=choice(_bonk_ans))  # type: ignore[reportOptionalMemberAccess]
         else:
             await interaction.response.send_message("Fool", ephemeral=True)
 
@@ -161,12 +161,14 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def bonk(self, ctx):
+        """Bonk me."""
         k = BonkView(ctx)
         msg = await ctx.send(content="Good.", view=k)
         k.update_msg(msg)
 
     @commands.command()
     async def areweinpsl(self, ctx):
+        """Show whether PSL changes are deployed."""
         if _psl.is_public_suffix("is-a.dev"):
             await ctx.send("Yes, we are.")
         else:
@@ -174,7 +176,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def ubdict(self, ctx: commands.Context, *, word: str):
-        """contributed by vaibhav"""
+        """Show urban dictionary query. Contributed by vaibhav."""
         params = {"term": word}
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -218,7 +220,7 @@ class Fun(commands.Cog):
         await k.wait()
         winner = k.determine_winner()
         await i.edit(
-            f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappy game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.",
+            content=f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappy game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.",
             allowed_mentions=nextcord.AllowedMentions.none(),
             view=k,
         )
@@ -227,21 +229,22 @@ class Fun(commands.Cog):
     async def moral(
         self, ctx: commands.Context, member: Optional[nextcord.Member] = None
     ) -> None:
+        """Show one's moral."""
         if not member:
-            member = ctx.author
-        if member.id == 716134528409665586:
+            member = ctx.author  # type: ignore[reportAssignmentType]
+        if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
             state = "Paragon of Virtue"
         # elif member.id == 599998971707916299:
         #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
         #     state = choice(moral_edited)
-        elif member.id == 853158265466257448:
+        elif member.id == 853158265466257448:  # type: ignore[reportOptionalMemberAccess]
             state = "Beneath contempt"
-        elif member.id == 961063229168164864:
+        elif member.id == 961063229168164864:  # type: ignore[reportOptionalMemberAccess]
             state = "Degenerate"
         else:
             state = choice(_morals)
 
-        await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")
+        await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")  # type: ignore[reportOptionalMemberAccess]
 
     @nextcord.user_command(name="See moral")
     async def see_moral(
@@ -271,24 +274,43 @@ class Fun(commands.Cog):
     async def fool(
         self, ctx: commands.Context, member: Optional[nextcord.Member] = None
     ) -> None:
+        """Show the fool level of somebody."""
         if not member:
-            member = ctx.author
-        if member.id == 716134528409665586:
+            member = ctx.author  # type: ignore[reportAssignmentType] 
+        if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
             level = 0
-        elif member.id == 853158265466257448:
-            level = -69
+        # elif member.id == 853158265466257448:
+        #     level = 99+3/4
         else:
             level = random.randint(0, 100)
 
-        await ctx.send(f"**{member.display_name}** is {level}% a fool.")
+        await ctx.send(f"**{member.display_name}** is {level}% a fool.")  # type: ignore[reportOptionalMemberAccess]
 
     @commands.command()
     async def imbored(self, ctx: commands.Context):
+        """Fetch an activity to do from BoredAPI."""
         response = await request("GET", "http://www.boredapi.com/api/activity/")
         await ctx.send(
             f"You should probably **{response['activity']}** to occupy yourself."
         )
 
+    @commands.command()
+    async def httpcat(self, ctx: commands.Context, code: int = 406):
+        """Fetch an HTTP Cat image from the http.cat API."""
+        await ctx.send(f"https://http.cat/{code}")
+
+    @commands.command()
+    async def dog(self, ctx: commands.Context):
+        """Fetch a Dog image from dog.ceo API."""
+        k = await request("GET", "https://dog.ceo/api/breeds/image/random")
+        await ctx.send(k['message'])
+
+    @commands.command()
+    async def shouldi(self, ctx: commands.Context, question: Optional[str] = None):
+        """Answer your question using yesno.wtf API."""
+        r = await request("GET",
+                          "https://yesno.wtf/api")
+        await ctx.send(f"answer: [{r['answer']}]({r['image']})")
 
 def setup(bot):
     bot.add_cog(Fun(bot))

@@ -248,6 +248,7 @@ class TagsNew(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     async def tag(self, ctx: commands.Context, tag_name: str = "null"):
+        """Find a tag. Equivalent to `^tag_name` and `oc/find tag_name`."""
         with self._db.cursor() as cursor:
             cursor.execute("SELECT * FROM taginfo\nWHERE name=%s", (tag_name,))
             if info := cursor.fetchone():
@@ -262,12 +263,14 @@ class TagsNew(commands.Cog):
 
     @tag.command()
     async def list(self, ctx: commands.Context):
+        """List current available tag."""
         with self._db.cursor() as cursor:
             cursor.execute("SELECT name FROM taginfo")
             await ctx.send(cursor.fetchall())
 
     @commands.command()
     async def find(self, ctx: commands.Context, tag_name: str = "null"):
+        """Find a tag."""
         # print("command found")
         # print(tag_name)
         with self._db.cursor() as cursor:
@@ -285,11 +288,13 @@ class TagsNew(commands.Cog):
     @tag.command()
     @commands.check(tag_operation_check)
     async def create(self, ctx: commands.Context):
+        """Create a tag."""
         await ctx.send(view=TagCreationView(ctx, self._db))
 
     @tag.command()
     @commands.check(tag_operation_check)
     async def delete(self, ctx: commands.Context, tag_name: str):
+        """Delete a tag."""
         with self._db.cursor() as cursor:
             cursor.execute("SELECT * FROM taginfo WHERE name=%s", (tag_name,))
             if info := cursor.fetchone():
@@ -302,6 +307,7 @@ class TagsNew(commands.Cog):
     @tag.command()
     @commands.check(tag_operation_check)
     async def edit(self, ctx: commands.Context, tag_name: str):
+        """Edit a tag."""
         with self._db.cursor() as cursor:
             cursor.execute("SELECT * FROM taginfo WHERE name=%s", (tag_name,))
             if info := cursor.fetchone():
