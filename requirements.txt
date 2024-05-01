@@ -4,3 +4,5 @@ python-dotenv
 onami
 aiohttp
 psycopg2-binary
+nextcord-ext-help-commands
+nextcord-ext-menus
