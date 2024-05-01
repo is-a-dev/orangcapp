@@ -11,8 +11,8 @@ import traceback
 import nextcord
 import psycopg2
 from nextcord import Intents
-from nextcord.ext import commands
-from nextcord.ext import help_commands
+from nextcord.ext import commands, help_commands
+
 prefix = "oct/" if os.getenv("TEST") else "oc/"
 
 

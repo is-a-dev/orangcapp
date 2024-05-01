@@ -16,7 +16,7 @@ from os import getenv
 _psl = PSL()
 import random
 from random import choice
-from typing import TYPE_CHECKING, List, Optional, Literal
+from typing import TYPE_CHECKING, List, Literal, Optional
 
 _bonk_ans: List[str] = [
     "Ouch!",
@@ -276,7 +276,7 @@ class Fun(commands.Cog):
     ) -> None:
         """Show the fool level of somebody."""
         if not member:
-            member = ctx.author  # type: ignore[reportAssignmentType] 
+            member = ctx.author  # type: ignore[reportAssignmentType]
         if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
             level = 0
         # elif member.id == 853158265466257448:
@@ -303,14 +303,14 @@ class Fun(commands.Cog):
     async def dog(self, ctx: commands.Context):
         """Fetch a Dog image from dog.ceo API."""
         k = await request("GET", "https://dog.ceo/api/breeds/image/random")
-        await ctx.send(k['message'])
+        await ctx.send(k["message"])
 
     @commands.command()
     async def shouldi(self, ctx: commands.Context, question: Optional[str] = None):
         """Answer your question using yesno.wtf API."""
-        r = await request("GET",
-                          "https://yesno.wtf/api")
+        r = await request("GET", "https://yesno.wtf/api")
         await ctx.send(f"answer: [{r['answer']}]({r['image']})")
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))
