@@ -127,6 +127,7 @@ class FAQ(commands.Cog):
 
     @commands.command()  # type: ignore[reportArgumentType]
     async def faq(self, ctx: commands.Context):
+        """Show FAQ."""
         k = FAQView()
         embed = nextcord.Embed(
             title="Welcome to FAQ",

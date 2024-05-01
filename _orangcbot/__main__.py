@@ -11,7 +11,7 @@ import traceback
 import nextcord
 import psycopg2
 from nextcord import Intents
-from nextcord.ext import commands
+from nextcord.ext import commands, help_commands
 
 prefix = "oct/" if os.getenv("TEST") else "oc/"
 
@@ -73,7 +73,7 @@ class OrangcBot(commands.Bot):
 bot = OrangcBot(
     intents=Intents.all(),
     command_prefix=prefix,
-    help_command=commands.DefaultHelpCommand(),
+    help_command=help_commands.PaginatedHelpCommand(),
     case_insensitive=True,
 )
 # @bot.event
