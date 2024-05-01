@@ -218,7 +218,7 @@ class Fun(commands.Cog):
         await k.wait()
         winner = k.determine_winner()
         await i.edit(
-            f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappt game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.",
+            f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappy game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.",
             allowed_mentions=nextcord.AllowedMentions.none(),
             view=k,
         )
@@ -234,6 +234,8 @@ class Fun(commands.Cog):
         # elif member.id == 599998971707916299:
         #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
         #     state = choice(moral_edited)
+        elif member.id == 853158265466257448:
+            state = "Amazing and super cool"
         elif member.id == 961063229168164864:
             state = "Degenerate"
         else:
@@ -250,6 +252,8 @@ class Fun(commands.Cog):
         # elif member.id == 599998971707916299:
         #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
         #     state = choice(moral_edited)
+        elif member.id == 853158265466257448:
+            state = "Amazing and super cool"
         elif member.id == 961063229168164864:
             state = "Degenerate"
         else:
@@ -273,6 +277,8 @@ class Fun(commands.Cog):
             member = ctx.author
         if member.id == 716134528409665586:
             level = 0
+        elif member.id == 853158265466257448:
+            level = -69
         else:
             level = random.randint(0, 100)
 
