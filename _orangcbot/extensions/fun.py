@@ -265,9 +265,7 @@ class Fun(commands.Cog):
     @nextcord.slash_command()
     async def ping(self, interaction: nextcord.Interaction) -> None:
         """Am I alive?"""
-        await interaction.response.send_message(
-            "No"
-        )
+        await interaction.response.send_message("No")
 
     @commands.command()
     async def fool(
