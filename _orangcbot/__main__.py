@@ -18,13 +18,13 @@ prefix = "oct/" if os.getenv("TEST") else "oc/"
 
 class OrangcBot(commands.Bot):
     def __init__(self, *args, **kwargs) -> None:
-        self._db: psycopg2.connection = psycopg2.connect(
-            host=getenv("DBHOST"),
-            user=getenv("DBUSER"),
-            port=getenv("DBPORT"),
-            password=getenv("DBPASSWORD"),
-            dbname=getenv("DBNAME"),
-        )
+        # self._db: psycopg2.connection = psycopg2.connect(
+        #     host=getenv("DBHOST"),
+        #     user=getenv("DBUSER"),
+        #     port=getenv("DBPORT"),
+        #     password=getenv("DBPASSWORD"),
+        #     dbname=getenv("DBNAME"),
+        # )
         super().__init__(*args, **kwargs)
 
     async def on_command_error(
@@ -42,32 +42,8 @@ class OrangcBot(commands.Bot):
             await context.send("Fool")
             await super().on_command_error(context, error)
 
-    async def on_message(self, message: nextcord.Message) -> None:
-        # Those lines placed here may block normal message
-        # if not os.getenv("HASDB"): return
-        # if os.getenv("NO_SPAWN_TAG"): return
-        if message.content.startswith("^"):
-            if os.getenv("NO_SPAWN_TAG"):
-                return
-            if not os.getenv("HASDB"):
-                return
-            with self._db.cursor() as cursor:
-                cursor.execute(
-                    f"SELECT * FROM taginfo\nWHERE name='{message.content[1:]}'"
-                )
-                if info := cursor.fetchone():
-                    # print(info)
-                    await message.channel.send(
-                        embed=nextcord.Embed(
-                            title=info[2],
-                            description=info[3],
-                            color=nextcord.Color.red(),
-                        ).set_footer(text=f"ID {info[0]}. Author ID: {info[4]}")
-                    )
-                else:
-                    pass
-        else:
-            await super().on_message(message)
+    
+
 
 
 bot = OrangcBot(

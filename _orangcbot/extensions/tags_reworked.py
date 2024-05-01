@@ -9,6 +9,7 @@ from nextcord.ext import application_checks, commands
 
 load_dotenv()
 from os import getenv
+import os
 
 # if you are asking why there's a "my_" before the values, then it's because self.title overlaps the value in modal
 
@@ -246,6 +247,27 @@ class TagsNew(commands.Cog):
             dbname=getenv("DBNAME"),
         )
 
+    @commands.Cog.listener()
+    async def on_message(self, message: nextcord.Message) -> None:
+        if message.content.startswith("^"): 
+            if os.getenv("NO_SPAWN_TAG") == 1:
+                return
+            with self._db.cursor() as cursor:
+                cursor.execute(
+                    "SELECT * FROM taginfo\nWHERE name=%s",
+                    (message.content[1:], ),
+                )
+                if info := cursor.fetchone():
+                    # print(info)
+                    await message.channel.send(
+                        embed=nextcord.Embed(
+                            title=info[2],
+                            description=info[3],
+                            color=nextcord.Color.red(),
+                        ).set_footer(text=f"ID {info[0]}. Author ID: {info[4]}")
+                    )
+                else:
+                    pass
     @commands.group(invoke_without_command=True)
     async def tag(self, ctx: commands.Context, tag_name: str = "null"):
         """Find a tag. Equivalent to `^tag_name` and `oc/find tag_name`."""
