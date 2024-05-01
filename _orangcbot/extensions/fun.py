@@ -299,7 +299,7 @@ class Fun(commands.Cog):
         """Fetch an HTTP Cat image from the http.cat API."""
         await ctx.send(f"https://http.cat/{code}")
 
-    @commands.command()
+    @commands.command(aliases=['you'])
     async def dog(self, ctx: commands.Context):
         """Fetch a Dog image from dog.ceo API."""
         k = await request("GET", "https://dog.ceo/api/breeds/image/random")
