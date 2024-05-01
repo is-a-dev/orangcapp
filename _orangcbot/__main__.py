@@ -42,9 +42,6 @@ class OrangcBot(commands.Bot):
             await context.send("Fool")
             await super().on_command_error(context, error)
 
-    
-
-
 
 bot = OrangcBot(
     intents=Intents.all(),
