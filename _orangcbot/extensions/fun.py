@@ -235,7 +235,7 @@ class Fun(commands.Cog):
         #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
         #     state = choice(moral_edited)
         elif member.id == 853158265466257448:
-            state = "Amazing and super cool"
+            state = "Beneath contempt"
         elif member.id == 961063229168164864:
             state = "Degenerate"
         else:
@@ -253,7 +253,7 @@ class Fun(commands.Cog):
         #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
         #     state = choice(moral_edited)
         elif member.id == 853158265466257448:
-            state = "Amazing and super cool"
+            state = "Beneath contempt"
         elif member.id == 961063229168164864:
             state = "Degenerate"
         else:
@@ -265,9 +265,7 @@ class Fun(commands.Cog):
     @nextcord.slash_command()
     async def ping(self, interaction: nextcord.Interaction) -> None:
         """Am I alive?"""
-        await interaction.response.send_message(
-            "No"
-        )
+        await interaction.response.send_message("No")
 
     @commands.command()
     async def fool(
