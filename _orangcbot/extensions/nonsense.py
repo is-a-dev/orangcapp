@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import nextcord
 from nextcord.ext import commands
@@ -55,6 +55,7 @@ class ReportDegenModal(nextcord.ui.Modal):
                 f"Actually, you would be a better degenerate than **{self.degen.value}**. Invalid report."
             )
 
+
 class ProposeView(nextcord.ui.View):
     if TYPE_CHECKING:
         message: nextcord.Message
@@ -62,17 +63,16 @@ class ProposeView(nextcord.ui.View):
     def __init__(self, spouse_id: int):
         super().__init__(timeout=30)
         self._spouse_id: int = spouse_id
-    
+
     def update_msg(self, msg: nextcord.Message):
         self._message = msg
-    
+
     @nextcord.ui.button(label="Yes", style=nextcord.ButtonStyle.green)
     async def yes(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         for child in self.children:
             child.disabled = True
         await interaction.response.defer()
         await self._message.edit("I love you!", view=self)
-        
 
     @nextcord.ui.button(label="No", style=nextcord.ButtonStyle.red)
     async def no(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -80,7 +80,7 @@ class ProposeView(nextcord.ui.View):
             child.disabled = True
         await interaction.response.defer()
         await self._message.edit("I hereby refuse your refusal.", view=self)
-        
+
     async def on_timeout(self):
         for child in self.children:
             child.disabled = True
@@ -93,6 +93,7 @@ class ProposeView(nextcord.ui.View):
         else:
             await interaction.send("Fool", ephemeral=True)
             return False
+
 
 class ReportDegenView(nextcord.ui.View):
     def __init__(self):
@@ -152,7 +153,14 @@ class Nonsense(commands.Cog):
     # @commands.cooldown(3, 8, commands.BucketType.user)
     # @commands.has_role(830875873027817484)
     async def screenshot(self, ctx: commands.Context, url: str):
-        await ctx.send(embed=nextcord.Embed(title="Screenshot", description=f"[Open in browser for fast rendering](http://image.thum.io/get/{url})", color=nextcord.Color.red()))
+        await ctx.send(
+            embed=nextcord.Embed(
+                title="Screenshot",
+                description=f"[Open in browser for fast rendering](http://image.thum.io/get/{url})",
+                color=nextcord.Color.red(),
+            )
+        )
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Nonsense(bot))
