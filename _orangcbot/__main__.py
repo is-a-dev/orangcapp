@@ -62,6 +62,7 @@ bot.load_extension("extensions.antiphishing")
 bot.load_extension("extensions.testing_functions")
 bot.load_extension("extensions.nonsense")
 bot.load_extension("extensions.dns")
+bot.load_extension("extensions.suggestions")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
