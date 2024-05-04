@@ -94,7 +94,9 @@ class Suggestion(commands.Cog):
         channel = interaction.guild.get_channel(self.suggestion_channel)
         message = await channel.fetch_message(messageId)
         embed = message.embeds[0]
-        new_embed = embed.add_field(name=f"Denied by {str(interaction.user)}", value=why)
+        new_embed = embed.add_field(
+            name=f"Denied by {str(interaction.user)}", value=why
+        )
         await message.edit(embed=new_embed)
         await interaction.send("Done.")
 
@@ -115,7 +117,9 @@ class Suggestion(commands.Cog):
         channel = self.bot.get_channel(self.suggestion_channel)
         message = await channel.fetch_message(messageId)
         embed = message.embeds[0]
-        new_embed = embed.add_field(name=f"Approved by {str(interaction.user)}", value=why)
+        new_embed = embed.add_field(
+            name=f"Approved by {str(interaction.user)}", value=why
+        )
         await message.edit(embed=new_embed)
 
         await interaction.send("Done.")
