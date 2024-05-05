@@ -131,7 +131,7 @@ class BonkView(nextcord.ui.View):
 
     async def on_timeout(self):
         for child in self.children:
-            child.disabled = True 
+            child.disabled = True
         await self.message.edit(view=self)
 
 
