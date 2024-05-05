@@ -129,6 +129,11 @@ class BonkView(nextcord.ui.View):
         else:
             await interaction.response.send_message("Fool", ephemeral=True)
 
+    async def on_timeout(self):
+        for child in self.children:
+            child.disabled = True 
+        await self.message.edit(view=self)
+
 
 # class RandomView(nextcord.ui.View):
 #    def __init__(self, ctx, randomwhat: str):

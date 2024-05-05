@@ -63,6 +63,7 @@ class ProposeView(nextcord.ui.View):
     def __init__(self, spouse_id: int):
         super().__init__(timeout=30)
         self._spouse_id: int = spouse_id
+        self._answered: Optional[bool] = None
 
     def update_msg(self, msg: nextcord.Message):
         self._message = msg
@@ -71,6 +72,7 @@ class ProposeView(nextcord.ui.View):
     async def yes(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         for child in self.children:
             child.disabled = True
+        self._answered = True
         await interaction.response.defer()
         await self._message.edit("I love you!", view=self)
 
@@ -78,14 +80,15 @@ class ProposeView(nextcord.ui.View):
     async def no(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         for child in self.children:
             child.disabled = True
+        self._answered = True
         await interaction.response.defer()
         await self._message.edit("I hereby refuse your refusal.", view=self)
 
     async def on_timeout(self):
         for child in self.children:
             child.disabled = True
-
-        await self._message.edit("You missed the boat. Failure.", view=self)
+        if not self._answered:
+            await self._message.edit("You missed the boat. Failure.", view=self)
 
     async def interaction_check(self, interaction: nextcord.Interaction):
         if interaction.user.id == self._spouse_id:
@@ -127,7 +130,7 @@ class Nonsense(commands.Cog):
         <#991779321758896258> (for an interactive experience go to <#960446827579199488> and type `oc/faq`)
         <#1228996111390343229>
         """
-        await ctx.send(view=LinkView())
+        await ctx.send(k, view=LinkView())
 
     @commands.command()
     async def regex(self, ctx: commands.Context, pattern: str, string: str):

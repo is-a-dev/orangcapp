@@ -69,8 +69,8 @@ class DigDropdown(nextcord.ui.Select):
 
 
 class DNSView(nextcord.ui.View):
-    # if TYPE_CHECKING:
-    #     _message: nextcord.Message
+    if TYPE_CHECKING:
+        _message: nextcord.Message
 
     def __init__(self, url: str, author_id: int):
         super().__init__(timeout=600)
@@ -86,7 +86,13 @@ class DNSView(nextcord.ui.View):
             return False
 
     def update_msg(self, msg: nextcord.Message) -> None:
+        self._message = msg
         self.dropdown.update_msg(msg)
+
+    async def on_timeout(self):
+        for child in self.children:
+            child.disabled = True
+        await self._message.edit(view=self)
 
 
 class DNS(commands.Cog):
