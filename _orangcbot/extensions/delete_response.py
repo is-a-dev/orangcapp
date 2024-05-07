@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from nextcord.ext import commands
 import nextcord
+from nextcord.ext import commands
 
 
 class DeleteResponse(commands.Cog):
@@ -13,11 +13,13 @@ class DeleteResponse(commands.Cog):
         if event.event_type == "REACTION_ADD":
             # print(event.emoji == "<:delete:1236642973576331328>")
             if str(event.emoji) == "<:delete:1236642973576331328>":
+
                 # Do not delete suggestions
                 if event.channel_id == 1236200920317169695: return 
                 n = await self._bot.get_channel(event.channel_id).fetch_message(event.message_id)
                 if self._bot.get_user(event.user_id).bot == False:  # type: ignore[reportOptionalMemberAccess]
                     if n.author.id == self._bot.user.id:  # type: ignore[reportOptionalMemberAccess]
+
                         await n.delete()
                     else:
                         pass
@@ -27,6 +29,7 @@ class DeleteResponse(commands.Cog):
                 pass
         else:
             pass
+
 
 def setup(bot: commands.Bot) -> None:
     bot.add_cog(DeleteResponse(bot))
