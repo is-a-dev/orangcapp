@@ -15,8 +15,11 @@ class DeleteResponse(commands.Cog):
             if str(event.emoji) == "<:delete:1236642973576331328>":
 
                 # Do not delete suggestions
-                if event.channel_id == 1236200920317169695: return 
-                n = await self._bot.get_channel(event.channel_id).fetch_message(event.message_id)
+                if event.channel_id == 1236200920317169695:
+                    return
+                n = await self._bot.get_channel(event.channel_id).fetch_message(
+                    event.message_id
+                )
                 if self._bot.get_user(event.user_id).bot == False:  # type: ignore[reportOptionalMemberAccess]
                     if n.author.id == self._bot.user.id:  # type: ignore[reportOptionalMemberAccess]
 

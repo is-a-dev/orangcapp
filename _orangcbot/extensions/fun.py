@@ -255,7 +255,7 @@ class Fun(commands.Cog):
         self, interaction: nextcord.Interaction, member: nextcord.Member
     ) -> None:
         if member.id == 716134528409665586:
-            state = "Paragon of Virtue" 
+            state = "Paragon of Virtue"
         elif member.id == 853158265466257448:
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
