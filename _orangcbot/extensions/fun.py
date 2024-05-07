@@ -239,9 +239,8 @@ class Fun(commands.Cog):
             member = ctx.author  # type: ignore[reportAssignmentType]
         if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
             state = "Paragon of Virtue"
-        # elif member.id == 599998971707916299:
-        #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
-        #     state = choice(moral_edited)
+        elif member.activity.name in ("Code", "Visual Studio Code"):
+            state = "Worse than `very bad` (using vscode)"
         elif member.id == 853158265466257448:  # type: ignore[reportOptionalMemberAccess]
             state = "Beneath contempt"
         elif member.id == 961063229168164864:  # type: ignore[reportOptionalMemberAccess]
@@ -256,14 +255,13 @@ class Fun(commands.Cog):
         self, interaction: nextcord.Interaction, member: nextcord.Member
     ) -> None:
         if member.id == 716134528409665586:
-            state = "Paragon of Virtue"
-        # elif member.id == 599998971707916299:
-        #     moral_edited = copy.copy(_morals).append("Paragon of Virtue")
-        #     state = choice(moral_edited)
+            state = "Paragon of Virtue" 
         elif member.id == 853158265466257448:
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
             state = "Degenerate"
+        elif member.activity.name in ("Code", "Visual Studio Code"):  # type: ignore[reportOptionalMemberAccess]
+            state = "Worse than `Very bad` (using vscode)"
         else:
             state = choice(_morals)
         await interaction.response.send_message(
