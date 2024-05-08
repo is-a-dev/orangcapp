@@ -239,8 +239,9 @@ class Fun(commands.Cog):
             member = ctx.author  # type: ignore[reportAssignmentType]
         if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
             state = "Paragon of Virtue"
-        elif member.activity.name in ("Code", "Visual Studio Code"):
-            state = "Worse than `very bad` (using vscode)"
+        elif k := member.activity:
+            if k.name in ("Code", "Visual Studio Code"):
+                state = "Worse than `very bad` (using vscode)"
         elif member.id == 853158265466257448:  # type: ignore[reportOptionalMemberAccess]
             state = "Beneath contempt"
         elif member.id == 961063229168164864:  # type: ignore[reportOptionalMemberAccess]
