@@ -235,6 +235,7 @@ class Fun(commands.Cog):
         self, ctx: commands.Context, member: Optional[nextcord.Member] = None
     ) -> None:
         """Show one's moral."""
+        state = ""
         if not member:
             member = ctx.author  # type: ignore[reportAssignmentType]
         if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
@@ -255,14 +256,16 @@ class Fun(commands.Cog):
     async def see_moral(
         self, interaction: nextcord.Interaction, member: nextcord.Member
     ) -> None:
+        state = ""
         if member.id == 716134528409665586:
             state = "Paragon of Virtue"
         elif member.id == 853158265466257448:
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
             state = "Degenerate"
-        elif member.activity.name in ("Code", "Visual Studio Code"):  # type: ignore[reportOptionalMemberAccess]
-            state = "Worse than `Very bad` (using vscode)"
+        elif k := member.activity:
+            if k.name in ("Code", "Visual Studio Code"):
+                state = "Worse than `very bad` (using vscode)"
         else:
             state = choice(_morals)
         await interaction.response.send_message(

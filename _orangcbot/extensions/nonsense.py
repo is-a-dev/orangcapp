@@ -3,8 +3,11 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING, Optional
 
+import aiohttp
 import nextcord
 from nextcord.ext import commands
+
+from .converters import SubdomainNameConverter
 
 
 class LinkView(nextcord.ui.View):
@@ -27,6 +30,12 @@ class LinkView(nextcord.ui.View):
             )
         )
         # self.add_item(nextcord.ui.Button(label="Help Channel", url="", row=4))
+
+
+async def request(*args, **kwargs):
+    async with aiohttp.ClientSession() as session:
+        async with session.request(*args, **kwargs) as ans:
+            return await ans.json(content_type=None)
 
 
 class ReportDegenModal(nextcord.ui.Modal):
@@ -163,6 +172,80 @@ class Nonsense(commands.Cog):
                 color=nextcord.Color.red(),
             )
         )
+
+    def fetch_description_about_a_domain(self, data: Dict):
+        parsed_contact = {}
+        print(data["owner"])
+        for platform, username in data["owner"].items():
+            if platform == "username":
+                parsed_contact["github"] = (
+                    f"[{username}](https://github.com/{username})"
+                )
+            elif platform == "twitter":
+                parsed_contact["twitter"] = (
+                    f"[{username}](https://twitter.com/{username})"
+                )
+            elif platform == "email":
+                if username != "":
+                    parsed_contact["email"] = username
+            else:
+                # unknown contact, ignoring
+                parsed_contact[platform] = username
+
+        contact_desc = """**CONTACT INFO**\n"""
+        for x, y in parsed_contact.items():
+            contact_desc += f"**{x}**: {y}\n"
+
+        record_desc = """**RECORD INFO**\n"""
+        for x, y in data["record"].items():
+            if x == "CNAME":
+                record_desc += f"**{x}**: {y} [(visit this CNAME?)](https://{y})"
+            else:
+                record_desc += f"**{x}**: {y}"
+
+        if domain_desc := data.get("description"):
+            domain_desc = "**DESCRIPTION**: " + domain_desc + "\n"
+        else:
+            domain_desc = None
+
+        if repo := data.get("repo"):
+            repo_desc = "**REPO**: " + f"[here]({repo})" + "\n"
+        else:
+            repo_desc = None
+
+        # do not ask about the description of this thing
+        my_description = f"""
+        {contact_desc}
+        {record_desc}
+        """
+        if domain_desc is not None:
+            my_description += domain_desc + "\n"
+        if repo_desc is not None:
+            my_description += repo_desc + "\n"
+        return my_description
+
+    @commands.command()
+    async def whois(
+        self, ctx: commands.Context, domain: SubdomainNameConverter
+    ) -> None:
+        k = nextcord.ui.View()
+        k.add_item(
+            nextcord.ui.Button(
+                style=nextcord.ButtonStyle.url,
+                url=f"https://github.com/is-a-dev/register/blob/main/domains/{domain}.json",
+                label="Edit this subdomain?",
+            )
+        )
+        data = await request(
+            "GET",
+            f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
+        )
+        embed = nextcord.Embed(
+            color=nextcord.Color.red(),
+            title=f"Info about {domain}.is-a.dev",
+            description=self.fetch_description_about_a_domain(data),
+        )
+        await ctx.send(embed=embed, view=k)
 
 
 def setup(bot: commands.Bot):
