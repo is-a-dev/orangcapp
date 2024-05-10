@@ -9,7 +9,6 @@ from nextcord.ext import commands
 from .converters import SubdomainNameConverter
 import aiohttp
 
-
 class LinkView(nextcord.ui.View):
     def __init__(self):
         super().__init__()
