@@ -261,8 +261,9 @@ class Fun(commands.Cog):
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
             state = "Degenerate"
-        elif member.activity.name in ("Code", "Visual Studio Code"):  # type: ignore[reportOptionalMemberAccess]
-            state = "Worse than `Very bad` (using vscode)"
+        elif k := member.activity:
+            if k.name in ("Code", "Visual Studio Code"):
+                state = "Worse than `very bad` (using vscode)"
         else:
             state = choice(_morals)
         await interaction.response.send_message(
