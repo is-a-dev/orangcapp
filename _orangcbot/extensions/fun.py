@@ -235,19 +235,24 @@ class Fun(commands.Cog):
         self, ctx: commands.Context, member: Optional[nextcord.Member] = None
     ) -> None:
         """Show one's moral."""
-        state = ""
+        # state = ""
         if not member:
             member = ctx.author  # type: ignore[reportAssignmentType]
         if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
+            global state
             state = "Paragon of Virtue"
         elif k := member.activity:
             if k.name in ("Code", "Visual Studio Code"):
+                global state
                 state = "Worse than `very bad` (using vscode)"
         elif member.id == 853158265466257448:  # type: ignore[reportOptionalMemberAccess]
+            global state
             state = "Beneath contempt"
         elif member.id == 961063229168164864:  # type: ignore[reportOptionalMemberAccess]
+            global state
             state = "Degenerate"
         else:
+            global state
             state = choice(_morals)
 
         await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")  # type: ignore[reportOptionalMemberAccess]
@@ -256,17 +261,22 @@ class Fun(commands.Cog):
     async def see_moral(
         self, interaction: nextcord.Interaction, member: nextcord.Member
     ) -> None:
-        state = ""
+        # state = ""
         if member.id == 716134528409665586:
+            global state
             state = "Paragon of Virtue"
         elif member.id == 853158265466257448:
+            global state
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
+            global state
             state = "Degenerate"
         elif k := member.activity:
             if k.name in ("Code", "Visual Studio Code"):
+                global state
                 state = "Worse than `very bad` (using vscode)"
         else:
+            global state
             state = choice(_morals)
         await interaction.response.send_message(
             f"**{member.display_name}**'s moral status is **{state}**"
