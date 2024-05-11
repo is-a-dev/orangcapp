@@ -48,6 +48,7 @@ bot = OrangcBot(
     command_prefix=prefix,
     help_command=help_commands.PaginatedHelpCommand(),
     case_insensitive=True,
+    owner_id=716134528409665586,
 )
 # @bot.event
 # async def on_command_error(ctx, error):
