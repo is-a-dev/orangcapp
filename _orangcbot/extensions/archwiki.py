@@ -4,9 +4,14 @@ import nextcord
 
 import aiohttp
 
-from typing import TYPE_CHECKING, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Final, Generic, TypeVar
+import typing_extensions
 
 T = TypeVar("T")
+
+ARCHLINUX_IMAGE_URL: Final[str] = (
+    "https://archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png"
+)
 
 
 class ArchWikiPageSource(menus.ListPageSource, Generic[T]):
@@ -16,9 +21,7 @@ class ArchWikiPageSource(menus.ListPageSource, Generic[T]):
             description=page[1],
             color=nextcord.Color.from_rgb(23, 147, 209),
         )
-        embed.set_image(
-            url="https://archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png"
-        )
+        embed.set_image(url=ARCHLINUX_IMAGE_URL)
         return embed
 
     async def get_page(self, page_number: int) -> T:
