@@ -44,7 +44,7 @@ class NixWiki(commands.Cog):
     async def nixwiki(self, ctx: commands.Context, *, query: str) -> None:
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"https://nixos.wiki/api.php?action=opensearch&search={query}&limit=20&format=json"
+                f"https://wiki.nixos.org/api.php?action=opensearch&search={query}&limit=20&format=json"
             ) as resp:
                 k = await resp.json()
                 if len(k[1]) == 0:
