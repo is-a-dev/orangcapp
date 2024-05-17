@@ -192,11 +192,11 @@ class Nonsense(commands.Cog):
                 # unknown contact, ignoring
                 parsed_contact[platform] = username
 
-        contact_desc = """**CONTACT INFO**\n"""
+        contact_desc = """## Contact Information\n"""
         for x, y in parsed_contact.items():
             contact_desc += f"**{x}**: {y}\n"
 
-        record_desc = """**RECORD INFO**\n"""
+        record_desc = """## Records\n"""
         for x, y in data["record"].items():
             if x == "CNAME":
                 record_desc += f"**{x}**: {y} [(visit this CNAME?)](https://{y})\n"
@@ -232,7 +232,7 @@ class Nonsense(commands.Cog):
         k.add_item(
             nextcord.ui.Button(
                 style=nextcord.ButtonStyle.url,
-                url=f"https://github.com/is-a-dev/register/blob/main/domains/{domain}.json",
+                url=f"https://github.com/is-a-dev/register/edit/main/domains/{domain}.json",
                 label="Edit this subdomain?",
             )
         )
