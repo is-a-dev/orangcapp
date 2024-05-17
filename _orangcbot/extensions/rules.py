@@ -1,8 +1,9 @@
 from __future__ import annotations
-from nextcord.ext import commands, menus
+
+from typing import Final, List, Optional, Tuple
 
 import nextcord
-from typing import Final, List, Tuple, Optional
+from nextcord.ext import commands, menus
 
 RULES: Final[List[str]] = [
     "Follow Discord's ToS and Community Guidelines.",

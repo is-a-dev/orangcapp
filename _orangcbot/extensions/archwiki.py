@@ -1,11 +1,11 @@
 from __future__ import annotations
-from nextcord.ext import commands, menus
-import nextcord
-
-import aiohttp
 
 from typing import TYPE_CHECKING, Any, Final, Generic, TypeVar
+
+import aiohttp
+import nextcord
 import typing_extensions
+from nextcord.ext import commands, menus
 
 T = TypeVar("T")
 
