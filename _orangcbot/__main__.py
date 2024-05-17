@@ -65,8 +65,9 @@ bot.load_extension("extensions.nonsense")
 bot.load_extension("extensions.dns")
 bot.load_extension("extensions.suggestions")
 bot.load_extension("extensions.delete_response")
-bot.load_extension("extensions.archwiki")
 bot.load_extension("extensions.nixwiki")
+bot.load_extension("extensions.archwiki")
+
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
