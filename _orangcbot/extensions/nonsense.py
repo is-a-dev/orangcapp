@@ -216,6 +216,7 @@ class Nonsense(commands.Cog):
         # do not ask about the description of this thing
         my_description = f"""
         {contact_desc}
+
         {record_desc}
         """
         if domain_desc is not None:
