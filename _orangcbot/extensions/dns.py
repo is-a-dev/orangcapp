@@ -107,6 +107,9 @@ class DNS(commands.Cog):
             answer = "\n".join([str(ans) for ans in answers])
         except _dnsresolver.NoAnswer:
             answer = "NOT FOUND"
+        except _dnsresolver.NXDOMAIN:
+            await ctx.send("Domain requested does not exist. Aborting.")
+            return
         k = DNSView(url, ctx.author.id)
         msg = await ctx.send(embed=construct_embed(url, answer, "CNAME"), view=k)
         k.update_msg(msg)
