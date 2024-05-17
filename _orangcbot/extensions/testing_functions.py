@@ -13,6 +13,9 @@ class Testings(commands.Cog):
             await ctx.send("I did not expect you to be such a fool")
         else:
             command = self._bot.get_command(cmd)
+            if command is None:
+                await ctx.send("Command not found.")
+                return
             command.enabled = not command.enabled
             await ctx.send("Request satisfied, master.")
 
