@@ -192,11 +192,11 @@ class Nonsense(commands.Cog):
                 # unknown contact, ignoring
                 parsed_contact[platform] = username
 
-        contact_desc = """## Contact Information\n"""
+        contact_desc = """**Contact Info**:\n"""
         for x, y in parsed_contact.items():
             contact_desc += f"**{x}**: {y}\n"
 
-        record_desc = """## Records\n"""
+        record_desc = """**Record Info**:\n"""
         for x, y in data["record"].items():
             if x == "CNAME":
                 record_desc += f"**{x}**: {y} [(visit this CNAME?)](https://{y})\n"
@@ -204,12 +204,12 @@ class Nonsense(commands.Cog):
                 record_desc += f"**{x}**: {y}\n"
 
         if domain_desc := data.get("description"):
-            domain_desc = "**DESCRIPTION**: " + domain_desc + "\n"
+            domain_desc = "**Description**: " + domain_desc + "\n"
         else:
             domain_desc = None
 
         if repo := data.get("repo"):
-            repo_desc = "**REPO**: " + f"[here]({repo})" + "\n"
+            repo_desc = "**Repository**: " + f"[here]({repo})" + "\n"
         else:
             repo_desc = None
 
