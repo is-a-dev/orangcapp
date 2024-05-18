@@ -84,8 +84,7 @@ class GitHub(commands.Cog):
                 "GET",
                 f"https://api.github.com/repos/{pr.repo_owner}/{pr.repo_name}/issues/{pr.pr_id}",
             )
-            embed_description += f"[(#{pr.pr_id}) {i['title']}]({i[
-            'html_url']})\n"
+            embed_description += f"[(#{pr.pr_id}) {i['title']}]({i['html_url']})\n"
         await message.channel.send(
             embed=nextcord.Embed(
                 title="PR/Issue",
