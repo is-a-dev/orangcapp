@@ -7,6 +7,8 @@ import nextcord
 from dns import resolver as _dnsresolver
 from nextcord.ext import commands
 
+import whois
+
 _blobs = [
     "<:blobcat_cute:1236176247759966298>",
     "<:blobcat_food:1236176414768762880>",
@@ -49,6 +51,8 @@ class DigDropdown(nextcord.ui.Select):
             DigSelectOption("AAAA"),
             DigSelectOption("MX"),
             DigSelectOption("TXT"),
+            DigSelectOption("SRV"),
+            DigSelectOption("PTR"),
         ]
         self._url: str = url
         super().__init__(options=options, placeholder="What records do you want?")
@@ -99,7 +103,7 @@ class DNS(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self._bot: commands.Bot = bot
 
-    @commands.command()
+    @commands.command(aliases=["dns"])
     async def dig(self, ctx: commands.Context, url: str):
         """Dig an URL for its DNS records. Default to CNAME, if you want other then select in the dropdown."""
         try:
@@ -113,6 +117,18 @@ class DNS(commands.Cog):
         k = DNSView(url, ctx.author.id)
         msg = await ctx.send(embed=construct_embed(url, answer, "CNAME"), view=k)
         k.update_msg(msg)
+
+    @commands.command()
+    async def whois(self, ctx: commands.Context, url: str) -> None:
+        """Dig an URL for WHOIS info."""
+        r = whois.whois(url)
+        await ctx.send(
+            embed=nextcord.Embed(
+                title=f"WHOIS info for {url}",
+                description=r.text,
+                color=nextcord.Color.random(),
+            )
+        )
 
 
 def setup(bot: commands.Bot) -> None:
