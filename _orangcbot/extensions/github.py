@@ -74,6 +74,8 @@ class GitHub(commands.Cog):
                     await message.delete()
 
             return
+        if message.channel.id == PR_CHANNEL_ID:
+            await message.edit(suppress=True)
         embed_description = """"""
         for pr in pr_list:
             i = await request(
@@ -82,7 +84,6 @@ class GitHub(commands.Cog):
             )
             embed_description += f"[(#{pr.pr_id}) {i['title']}]({i[
             'html_url']})\n"
-        await message.edit(suppress=True)
         await message.channel.send(
             embed=nextcord.Embed(
                 title="PR/Issue",
