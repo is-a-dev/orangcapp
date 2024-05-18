@@ -119,7 +119,7 @@ class DNS(commands.Cog):
         k.update_msg(msg)
 
     @commands.command()
-    async def whois(self, ctx: commands.Context, url: str) -> None:
+    async def urlwhois(self, ctx: commands.Context, url: str) -> None:
         """Dig an URL for WHOIS info."""
         r = whois.whois(url)
         await ctx.send(
