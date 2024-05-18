@@ -10,6 +10,10 @@ from nextcord.ext import commands
 from .converters import SubdomainNameConverter
 
 
+class DomainNotExistError(commands.CommandError):
+    """Error raised when domain cannot be found."""
+
+
 class LinkView(nextcord.ui.View):
     def __init__(self):
         super().__init__()
@@ -35,6 +39,8 @@ class LinkView(nextcord.ui.View):
 async def request(*args, **kwargs):
     async with aiohttp.ClientSession() as session:
         async with session.request(*args, **kwargs) as ans:
+            if ans.status == 404:
+                raise DomainNotExistError("imagine")
             return await ans.json(content_type=None)
 
 
@@ -216,6 +222,7 @@ class Nonsense(commands.Cog):
         # do not ask about the description of this thing
         my_description = f"""
         {contact_desc}
+
         {record_desc}
         """
         if domain_desc is not None:
@@ -236,10 +243,14 @@ class Nonsense(commands.Cog):
                 label="Edit this subdomain?",
             )
         )
-        data = await request(
-            "GET",
-            f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
-        )
+        try:
+            data = await request(
+                "GET",
+                f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
+            )
+        except DomainNotExistError:
+            await ctx.send("The domain queried cannot be found. Aborting.")
+            return
         embed = nextcord.Embed(
             color=nextcord.Color.red(),
             title=f"Info about {domain}.is-a.dev",
