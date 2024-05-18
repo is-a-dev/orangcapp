@@ -1,9 +1,11 @@
 from __future__ import annotations
+
 import re
 from typing import List
-from nextcord.ext import commands
-import nextcord
+
 import aiohttp
+import nextcord
+from nextcord.ext import commands
 
 
 async def request(*args, **kwargs):
@@ -17,7 +19,7 @@ async def request(*args, **kwargs):
 request.__doc__ = aiohttp.ClientSession.request.__doc__
 
 
-FULL_MATCH_ANY_REPO = r"(https:\/\/github.com\/)?([A-Za-z1-9-]+)\/([A-Za-z1-9-]+)(\/pull)?(#|\/)(?P<pr_id>\d+)" 
+FULL_MATCH_ANY_REPO = r"(https:\/\/github.com\/)?([A-Za-z1-9-]+)\/([A-Za-z1-9-]+)(\/pull)?(#|\/)(?P<pr_id>\d+)"
 
 
 MATCH_IS_A_DEV_ONLY = r"register#(\d+)"
@@ -56,7 +58,7 @@ class GitHub(commands.Cog):
                     )
                 )
         # TODO: Fix is-a-dev-only regex
-        
+
         # elif len(is_a_dev_matches) > 0:
         #     for x in is_a_dev_matches:
         #         repo_owner = "is-a-dev"
@@ -67,7 +69,7 @@ class GitHub(commands.Cog):
         #                 repo_owner=repo_owner, repo_name=repo_name, pr_id=pr_id
         #             )
         #         )
-        
+
         else:
             if message.channel.id == PR_CHANNEL_ID:
                 if message.author.get_role(STAFF_ROLE_ID) is None:
@@ -88,7 +90,7 @@ class GitHub(commands.Cog):
             embed=nextcord.Embed(
                 title="PR/Issue",
                 description=embed_description,
-                color=nextcord.Color.from_rgb(136,225,180),
+                color=nextcord.Color.from_rgb(136, 225, 180),
             )
         )
 
