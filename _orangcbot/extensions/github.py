@@ -41,14 +41,14 @@ class GitHub(commands.Cog):
         if message.author.bot:
             return
         full_matches: List[re.Match] = re.findall(FULL_MATCH_ANY_REPO, message.content)
-        print(full_matches)
+        # print(full_matches)
         is_a_dev_matches: List[re.Match] = re.findall(
             MATCH_IS_A_DEV_ONLY, message.content
         )
         pr_list: List[_PRRawObject] = []
         if len(full_matches) > 0:
             for x in full_matches:
-                print(x)
+                # print(x)
                 repo_owner = x[1]
                 repo_name = x[2]
                 pr_id = x[5]
@@ -76,8 +76,8 @@ class GitHub(commands.Cog):
                     await message.delete()
 
             return
-        if message.channel.id == PR_CHANNEL_ID:
-            await message.edit(suppress=True)
+        # if message.channel.id == PR_CHANNEL_ID:
+        await message.edit(suppress=True)
         embed_description = """"""
         for pr in pr_list:
             i = await request(
