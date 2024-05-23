@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Literal, Optional
 
 import aiohttp
 import nextcord
@@ -36,10 +36,10 @@ class LinkView(nextcord.ui.View):
         # self.add_item(nextcord.ui.Button(label="Help Channel", url="", row=4))
 
 
-async def request(*args, **kwargs):
+async def request(requesting_domain: bool = False, *args, **kwargs):
     async with aiohttp.ClientSession() as session:
         async with session.request(*args, **kwargs) as ans:
-            if ans.status == 404:
+            if ans.status == 404 and requesting_domain:
                 raise DomainNotExistError("imagine")
             return await ans.json(content_type=None)
 
@@ -181,7 +181,6 @@ class Nonsense(commands.Cog):
 
     def fetch_description_about_a_domain(self, data: Dict):
         parsed_contact = {}
-        print(data["owner"])
         for platform, username in data["owner"].items():
             if platform == "username":
                 parsed_contact["github"] = (
@@ -245,6 +244,7 @@ class Nonsense(commands.Cog):
         )
         try:
             data = await request(
+                True,
                 "GET",
                 f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
             )
@@ -257,6 +257,22 @@ class Nonsense(commands.Cog):
             description=self.fetch_description_about_a_domain(data),
         )
         await ctx.send(embed=embed, view=k)
+
+    @commands.command()
+    async def check(
+        self, ctx: commands.Context, domain: SubdomainNameConverter
+    ) -> None:
+        try:
+            data = await request(
+                True,
+                "GET",
+                f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
+            )
+            await ctx.send(f"Domain {domain} is already taken.")
+        except DomainNotExistError:
+            await ctx.send(
+                "This domain is still available. Claim it before someone take it."
+            )
 
 
 def setup(bot: commands.Bot):

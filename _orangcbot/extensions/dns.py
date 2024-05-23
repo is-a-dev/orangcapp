@@ -117,18 +117,6 @@ class DNS(commands.Cog):
         msg = await ctx.send(embed=construct_embed(url, answer, "CNAME"), view=k)
         k.update_msg(msg)
 
-    @commands.command()
-    async def urlwhois(self, ctx: commands.Context, url: str) -> None:
-        """Dig an URL for WHOIS info."""
-        r = whois.whois(url)
-        await ctx.send(
-            embed=nextcord.Embed(
-                title=f"WHOIS info for {url}",
-                description=r.text,
-                color=nextcord.Color.random(),
-            )
-        )
-
 
 def setup(bot: commands.Bot) -> None:
     bot.add_cog(DNS(bot))

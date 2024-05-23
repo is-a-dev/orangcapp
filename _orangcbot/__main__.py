@@ -49,6 +49,7 @@ bot = OrangcBot(
     help_command=help_commands.PaginatedHelpCommand(),
     case_insensitive=True,
     owner_id=716134528409665586,
+    allowed_mentions=nextcord.AllowedMentions.none(),
 )
 # @bot.event
 # async def on_command_error(ctx, error):
