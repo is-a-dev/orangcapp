@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Literal, Optional
 
 import aiohttp
 import nextcord
@@ -36,10 +36,10 @@ class LinkView(nextcord.ui.View):
         # self.add_item(nextcord.ui.Button(label="Help Channel", url="", row=4))
 
 
-async def request(*args, **kwargs):
+async def request(requesting_domain: bool = False, *args, **kwargs):
     async with aiohttp.ClientSession() as session:
         async with session.request(*args, **kwargs) as ans:
-            if ans.status == 404:
+            if ans.status == 404 and requesting_domain:
                 raise DomainNotExistError("imagine")
             return await ans.json(content_type=None)
 
@@ -245,6 +245,7 @@ class Nonsense(commands.Cog):
         )
         try:
             data = await request(
+                True,
                 "GET",
                 f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
             )
