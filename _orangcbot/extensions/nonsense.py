@@ -259,6 +259,22 @@ class Nonsense(commands.Cog):
         )
         await ctx.send(embed=embed, view=k)
 
+    @commands.command()
+    async def check(
+        self, ctx: commands.Context, domain: SubdomainNameConverter
+    ) -> None:
+        try:
+            data = await request(
+                True,
+                "GET",
+                f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
+            )
+            await ctx.send(f"Domain {domain} is already taken.")
+        except DomainNotExistError:
+            await ctx.send(
+                "This domain is still available. Claim it before someone take it."
+            )
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Nonsense(bot))
