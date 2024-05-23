@@ -181,7 +181,6 @@ class Nonsense(commands.Cog):
 
     def fetch_description_about_a_domain(self, data: Dict):
         parsed_contact = {}
-        print(data["owner"])
         for platform, username in data["owner"].items():
             if platform == "username":
                 parsed_contact["github"] = (
