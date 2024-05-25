@@ -84,7 +84,7 @@ class Suggestion(commands.Cog):
     async def _deny(
         self,
         interaction: Interaction,
-        messageId=SlashOption(
+        messageId: int = SlashOption(
             name="message_id", description="Message to deny", required=True
         ),
         why: str = SlashOption(
@@ -107,7 +107,7 @@ class Suggestion(commands.Cog):
     async def _approve(
         self,
         interaction: Interaction,
-        messageId: str = SlashOption(
+        messageId: int = SlashOption(
             name="message_id", description="Message to approve", required=True
         ),
         why: str = SlashOption(
