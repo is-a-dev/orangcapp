@@ -135,7 +135,7 @@ class TagCreationModal(nextcord.ui.Modal):
 
 
 class TagCreationView(nextcord.ui.View):
-    def __init__(self, ctx: comamnds.Context, db: psycopg2.connection):
+    def __init__(self, ctx: commands.Context, db: psycopg2.connection):
         super().__init__()
         self._ctx: commands.Context = ctx
         self._db: psycopg2.connection = db
