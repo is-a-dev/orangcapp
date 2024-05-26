@@ -8,7 +8,7 @@ import requests
 def job1() -> bool:
     a = requests.request(
         "GET",
-        f"https://api.github.com/repos/is-a-dev/orangcapp/pulls/{os.environ["PR_NUMBER"]}",
+        f"https://api.github.com/repos/is-a-dev/orangcapp/pulls/{os.environ['PR_NUMBER']}",
         headers={"Accept": "application/vnd.github+json"},
         timeout=60,
     ).json()
@@ -22,7 +22,7 @@ result_1 = job1()
 def job2() -> bool:
     a = requests.request(
         "GET",
-        f"https://api.github.com/repos/is-a-dev/orangcapp/pulls/{os.environ["PR_NUMBER"]}/reviews",
+        f"https://api.github.com/repos/is-a-dev/orangcapp/pulls/{os.environ['PR_NUMBER']}/reviews",
         headers={"Accept": "application/vnd.github+json"},
         timeout=60,
     ).json()
