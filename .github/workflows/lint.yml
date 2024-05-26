@@ -19,7 +19,14 @@ jobs:
         id: install-deps
         run: |
           python3 -m pip install --upgrade black
-      - name: Lint
+          python3 -m pip install --upgrade requests
+      - name: Lint #1
         run: "black --check ."
         env:
           PR_TESTING: 1
+      - name: Lint #2
+        run: "python3 lint.py"
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          LINT_CODE: ${{ secrets.LINT_CODE }}
+
