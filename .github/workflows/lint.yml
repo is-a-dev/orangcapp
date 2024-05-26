@@ -29,4 +29,3 @@ jobs:
         env:
           PR_NUMBER: ${{ github.event.number }}
           LINT_CODE: ${{ secrets.LINT_CODE }}
-
