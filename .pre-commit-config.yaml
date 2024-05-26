@@ -8,7 +8,6 @@ repos:
     hooks:
       - id: black
         name: Run black in files
-        exclude: ^.github/
 
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
