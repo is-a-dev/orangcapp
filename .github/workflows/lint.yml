@@ -1,6 +1,5 @@
 on:
   pull_request:
-  push:
 
 jobs:
   lint:
@@ -19,7 +18,13 @@ jobs:
         id: install-deps
         run: |
           python3 -m pip install --upgrade black
-      - name: Lint
+          python3 -m pip install --upgrade requests
+      - name: Test 1
         run: "black --check ."
         env:
           PR_TESTING: 1
+      - name: Test 2
+        run: "python3 .github/workflows/lint.py"
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          LINT_CODE: ${{ secrets.LINT_CODE }}
