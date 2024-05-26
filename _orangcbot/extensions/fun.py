@@ -244,7 +244,7 @@ class Fun(commands.Cog):
 
         elif member.id == 853158265466257448:  # type: ignore[reportOptionalMemberAccess]
 
-            state = "Amazing dude"
+            state = "Beneath contempt"
         elif member.id == 961063229168164864:  # type: ignore[reportOptionalMemberAccess]
 
             state = "Degenerate"
@@ -264,7 +264,7 @@ class Fun(commands.Cog):
             state = "Paragon of Virtue"
         elif member.id == 853158265466257448:
 
-            state = "Amazing dude"
+            state = "Beneath contempt"
         elif member.id == 961063229168164864:
 
             state = "Degenerate"
@@ -290,8 +290,8 @@ class Fun(commands.Cog):
             member = ctx.author  # type: ignore[reportAssignmentType]
         if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
             level = 0
-        elif member.id == 853158265466257448:
-            level = 0
+        # elif member.id == 853158265466257448:
+        #     level = 99+3/4
         else:
             level = random.randint(0, 100)
 
