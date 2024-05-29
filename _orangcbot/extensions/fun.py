@@ -372,6 +372,8 @@ class FunSlash(commands.Cog):
             description="The user you want to see the moral.", required=False
         ),
     ) -> None:
+        if not member:
+            member = interaction.user
         if member.id == 716134528409665586:
             state = "Paragon of Virtue"
         elif member.id == 853158265466257448:
