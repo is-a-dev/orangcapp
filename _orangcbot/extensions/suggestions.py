@@ -84,7 +84,7 @@ class Suggestion(commands.Cog):
     async def _deny(
         self,
         interaction: Interaction,
-        messageId: int = SlashOption(
+        messageId: str = SlashOption(
             name="message_id", description="Message to deny", required=True
         ),
         why: str = SlashOption(
@@ -92,7 +92,7 @@ class Suggestion(commands.Cog):
         ),
     ):
         channel = interaction.guild.get_channel(self.suggestion_channel)
-        message = await channel.fetch_message(messageId)
+        message = await channel.fetch_message(int(messageId))
         embed = message.embeds[0]
         new_embed = embed.add_field(
             name=f"Denied by {str(interaction.user)}", value=why
@@ -107,7 +107,7 @@ class Suggestion(commands.Cog):
     async def _approve(
         self,
         interaction: Interaction,
-        messageId: int = SlashOption(
+        messageId: str = SlashOption(
             name="message_id", description="Message to approve", required=True
         ),
         why: str = SlashOption(
@@ -115,7 +115,7 @@ class Suggestion(commands.Cog):
         ),
     ):
         channel = self.bot.get_channel(self.suggestion_channel)
-        message = await channel.fetch_message(messageId)
+        message = await channel.fetch_message(int(messageId))
         embed = message.embeds[0]
         new_embed = embed.add_field(
             name=f"Approved by {str(interaction.user)}", value=why
