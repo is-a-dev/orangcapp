@@ -3,12 +3,6 @@ ci:
     style: auto fixes from pre-commit hooks
   autofix_prs: true
 repos:
-  - repo: https://github.com/psf/black
-    rev: 24.4.2
-    hooks:
-      - id: black
-        name: Run black in files
-
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
@@ -36,3 +30,17 @@ repos:
       - id: trailing-whitespace
         name: Check for trailing whitespace.
         args: [--markdown-linebreak-ext=md]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+  # Ruff version.
+    rev: v0.4.6
+    hooks:
+    # Run the linter.
+      - id: ruff
+        types_or: [ python, pyi, jupyter ]
+        args: [ --fix ]
+    # Run the formatter.
+      - id: ruff-format
+        types_or: [ python, pyi, jupyter ]
+
+
