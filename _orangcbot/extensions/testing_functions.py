@@ -24,6 +24,12 @@ class Testings(commands.Cog):
     async def test_owner_perm(self, ctx: commands.Context):
         await ctx.send("Master, how can I help you?")
 
+    @commands.command()
+    @commands.is_owner()
+    async def reload_slash_command(self, ctx: commands.Context) -> None:
+        await ctx.bot.sync_application_commands()
+        await ctx.send("Request satisfied, master.")
+
 
 def setup(bot: commands.Bot) -> None:
     bot.add_cog(Testings(bot))

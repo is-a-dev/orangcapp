@@ -3,6 +3,7 @@ from __future__ import annotations
 import aiohttp
 import dotenv
 import nextcord
+from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
 from psl_dns import PSL
 
@@ -239,17 +240,13 @@ class Fun(commands.Cog):
         if not member:
             member = ctx.author  # type: ignore[reportAssignmentType]
         if member.id == 716134528409665586:  # type: ignore[reportOptionalMemberAccess]
-
             state = "Paragon of Virtue"
 
         elif member.id == 853158265466257448:  # type: ignore[reportOptionalMemberAccess]
-
             state = "Beneath contempt"
         elif member.id == 961063229168164864:  # type: ignore[reportOptionalMemberAccess]
-
             state = "Degenerate"
         else:
-
             state = choice(_morals)
 
         await ctx.send(f"**{member.display_name}**'s moral status is **{state}**")  # type: ignore[reportOptionalMemberAccess]
@@ -260,17 +257,13 @@ class Fun(commands.Cog):
     ) -> None:
         # state = ""
         if member.id == 716134528409665586:
-
             state = "Paragon of Virtue"
         elif member.id == 853158265466257448:
-
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
-
             state = "Degenerate"
 
         else:
-
             state = choice(_morals)
         await interaction.response.send_message(
             f"**{member.display_name}**'s moral status is **{state}**"
@@ -298,14 +291,6 @@ class Fun(commands.Cog):
         await ctx.send(f"**{member.display_name}** is {level}% a fool.")  # type: ignore[reportOptionalMemberAccess]
 
     @commands.command()
-    async def imbored(self, ctx: commands.Context):
-        """Fetch an activity to do from BoredAPI."""
-        response = await request("GET", "http://www.boredapi.com/api/activity/")
-        await ctx.send(
-            f"You should probably **{response['activity']}** to occupy yourself."
-        )
-
-    @commands.command()
     async def httpcat(self, ctx: commands.Context, code: int = 406):
         """Fetch an HTTP Cat image from the http.cat API."""
         await ctx.send(f"https://http.cat/{code}")
@@ -323,5 +308,86 @@ class Fun(commands.Cog):
         await ctx.send(f"answer: [{r['answer']}]({r['image']})")
 
 
+class FunSlash(commands.Cog):
+    def __init__(self, bot: commands.Bot) -> None:
+        self._bot = bot
+
+    @nextcord.slash_command()
+    async def dog(self, interaction: Interaction):
+        k = await request("GET", "https://dog.ceo/api/breeds/image/random")
+        await interaction.send(k["message"])
+
+    @nextcord.slash_command()
+    async def httpcat(
+        self,
+        interaction: nextcord.Interaction,
+        code: int = SlashOption(
+            description="The HTTP code to fetch for", required=True
+        ),
+    ) -> None:
+        await interaction.send(f"https://http.cat/{code}")
+
+    @nextcord.slash_command()
+    async def shouldi(
+        self,
+        interaction: nextcord.Interaction,
+        question: str = SlashOption(
+            description="What are you asking me for?", required=False
+        ),
+    ) -> None:
+        r = await request("GET", "https://yesno.wtf/api")
+        await interaction.send(f"answer: [{r['answer']}]({r['image']})")
+
+    @nextcord.slash_command()
+    async def ubdict(
+        self,
+        interaction: nextcord.Interaction,
+        word: str = SlashOption(description="The word to search for", required=True),
+    ) -> None:
+        params = {"term": word}
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                "https://api.urbandictionary.com/v0/define", params=params
+            ) as response:
+                data = await response.json()
+        if not data["list"]:
+            await interaction.send("No results found.")
+            return
+        embed = nextcord.Embed(
+            title=data["list"][0]["word"],
+            description=data["list"][0]["definition"],
+            url=data["list"][0]["permalink"],
+            color=nextcord.Color.green(),
+        )
+        embed.set_footer(
+            text=f"👍 {data['list'][0]['thumbs_up']} | 👎 {data['list'][0]['thumbs_down']} | Powered by: Urban Dictionary"
+        )
+        await interaction.send(embed=embed)
+
+    @nextcord.slash_command()
+    async def moral(
+        self,
+        interaction: Interaction,
+        member: nextcord.User = SlashOption(
+            description="The user you want to see the moral.", required=False
+        ),
+    ) -> None:
+        if not member:
+            member = interaction.user
+        if member.id == 716134528409665586:
+            state = "Paragon of Virtue"
+        elif member.id == 853158265466257448:
+            state = "Beneath contempt"
+        elif member.id == 961063229168164864:
+            state = "Degenerate"
+
+        else:
+            state = choice(_morals)
+        await interaction.response.send_message(
+            f"**{member.display_name}**'s moral status is **{state}**"
+        )
+
+
 def setup(bot):
     bot.add_cog(Fun(bot))
+    bot.add_cog(FunSlash(bot))

@@ -73,7 +73,7 @@ class DigDropdown(nextcord.ui.Select):
 
 class DNSView(nextcord.ui.View):
     if TYPE_CHECKING:
-        _message: nextcord.Message
+        _message: nextcord.Message | nextcord.PartialInteractionMessage
 
     def __init__(self, url: str, author_id: int):
         super().__init__(timeout=600)
@@ -88,7 +88,9 @@ class DNSView(nextcord.ui.View):
             await interaction.send("Fool", ephemeral=True)
             return False
 
-    def update_msg(self, msg: nextcord.Message) -> None:
+    def update_msg(
+        self, msg: nextcord.Message | nextcord.PartialInteractionMessage
+    ) -> None:
         self._message = msg
         self.dropdown.update_msg(msg)
 
@@ -115,6 +117,30 @@ class DNS(commands.Cog):
             return
         k = DNSView(url, ctx.author.id)
         msg = await ctx.send(embed=construct_embed(url, answer, "CNAME"), view=k)
+        k.update_msg(msg)
+
+    @nextcord.slash_command(name="dig")
+    async def dig_(
+        self,
+        interaction: nextcord.Interaction,
+        url: str = nextcord.SlashOption(
+            description="The URL to dig for DNS records. Be sure to remove http or https://",
+            required=True,
+        ),
+    ) -> None:
+        """Dig an URL for its DNS records. Default to CNAME, if you want other things then please choose in the dropdown provided later."""
+        try:
+            answers = _dnsresolver.resolve(url, "CNAME")
+            answer = "\n".join([str(ans) for ans in answers])
+        except _dnsresolver.NoAnswer:
+            answer = "NOT FOUND"
+        except _dnsresolver.NXDOMAIN:
+            await interaction.send("Domain requested does not exist. Aborting.")
+            return
+        k = DNSView(url, interaction.user.id)
+        msg = await interaction.send(
+            embed=construct_embed(url, answer, "CNAME"), view=k
+        )
         k.update_msg(msg)
 
 

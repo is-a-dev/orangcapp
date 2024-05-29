@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Final, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Final, Generic, Self, TypeVar
 
 import aiohttp
 import nextcord
-import typing_extensions
+from nextcord import SlashOption, slash_command
 from nextcord.ext import commands, menus
 
 T = TypeVar("T")
@@ -55,6 +55,26 @@ class ArchWiki(commands.Cog):
                     return
                 l: ArchWikiButtonMenu = ArchWikiButtonMenu(k)
                 await l.start(ctx=ctx)
+
+    @nextcord.slash_command(name="archwiki")
+    async def archwiki_(
+        self: Self,
+        interaction: nextcord.Interaction,
+        query: str = SlashOption(
+            description="The documentation query to search for", required=True
+        ),
+    ):
+        """Query ArchWiki for a documentation entry."""
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"https://wiki.archlinux.org/api.php?action=opensearch&search={query}&limit=20&format=json"
+            ) as resp:
+                k = await resp.json()
+                if len(k[1]) == 0:
+                    await interaction.send("No results foundd, aborting.")
+                    return
+                l: ArchWikiButtonMenu = ArchWikiButtonMenu(k)
+                await l.start(interaction=interaction)
 
 
 def setup(bot: commands.Bot) -> None:
