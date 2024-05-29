@@ -291,14 +291,6 @@ class Fun(commands.Cog):
         await ctx.send(f"**{member.display_name}** is {level}% a fool.")  # type: ignore[reportOptionalMemberAccess]
 
     @commands.command()
-    async def imbored(self, ctx: commands.Context):
-        """Fetch an activity to do from BoredAPI."""
-        response = await request("GET", "http://www.boredapi.com/api/activity/")
-        await ctx.send(
-            f"You should probably **{response['activity']}** to occupy yourself."
-        )
-
-    @commands.command()
     async def httpcat(self, ctx: commands.Context, code: int = 406):
         """Fetch an HTTP Cat image from the http.cat API."""
         await ctx.send(f"https://http.cat/{code}")
@@ -347,16 +339,6 @@ class FunSlash(commands.Cog):
         await interaction.send(f"answer: [{r['answer']}]({r['image']})")
 
     @nextcord.slash_command()
-    async def imbored(
-        self,
-        interaction: nextcord.Interaction,
-    ) -> None:
-        response = await request("GET", "http://www.boredapi.com/api/activity/")
-        await interaction.send(
-            f"You should probably **{response['activity']}** to occupy yourself."
-        )
-
-    @nextcord.slash_command()
     async def ubdict(
         self,
         interaction: nextcord.Interaction,
@@ -387,7 +369,7 @@ class FunSlash(commands.Cog):
         self,
         interaction: Interaction,
         member: nextcord.User = SlashOption(
-            description="The user you want to see the moral."
+            description="The user you want to see the moral.", required=False
         ),
     ) -> None:
         if member.id == 716134528409665586:
