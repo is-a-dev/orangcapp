@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Final, Tuple
 
+from nextcord import Interaction, OptionConverter
 from nextcord.ext import commands
+
+__all__: Final[Tuple[str]] = ("SubdomainNameConverter", "SlashSubdomainNameConverter")
 
 
 class SubdomainNameConverter(commands.Converter):
@@ -16,3 +19,11 @@ class SubdomainNameConverter(commands.Converter):
 class RGBColorTupleConverter(commands.Converter):
     async def convert(self, ctx: commands.Context, argument: str) -> Tuple[str]:
         return argument.split("-")  # type: ignore[reportReturnType]
+
+
+class SlashSubdomainNameConverter(OptionConverter):
+    async def convert(self, interaction: Interaction, value: str) -> str:
+        value = value.lower()
+        if value.endswith(".is-a.dev"):
+            return value[:-9]
+        return value

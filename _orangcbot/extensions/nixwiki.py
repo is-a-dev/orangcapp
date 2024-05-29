@@ -53,6 +53,27 @@ class NixWiki(commands.Cog):
                 l: NixWikiButtonMenu = NixWikiButtonMenu(k)
                 await l.start(ctx=ctx)
 
+    @nextcord.slash_command(name="nixwiki")
+    async def nixwiki_(
+        self,
+        interaction: nextcord.Interaction,
+        query: str = nextcord.SlashOption(
+            description="The query of the documentation page to search for.",
+            required=True,
+        ),
+    ) -> None:
+        """Query the NixWiki Documentation for a specified query."""
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"https://nixos.wiki/api.php?action=opensearch&search={query}&limit=20&format=json"
+            ) as resp:
+                k = await resp.json()
+                if len(k[1]) == 0:
+                    await interaction.send("No results found")
+                    return
+                l: NixWikiButtonMenu = NixWikiButtonMenu(k)
+                await l.start(interaction=interaction)
+
 
 def setup(bot: commands.Bot) -> None:
     bot.add_cog(NixWiki(bot))

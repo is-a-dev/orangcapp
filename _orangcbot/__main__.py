@@ -10,7 +10,8 @@ import traceback
 
 import nextcord
 import psycopg2
-from nextcord import Intents
+from nextcord import ApplicationError, Intents
+from nextcord.ext import application_checks as ac
 from nextcord.ext import commands, help_commands
 
 prefix = "oct/" if os.getenv("TEST") else "oc/"
@@ -41,6 +42,15 @@ class OrangcBot(commands.Bot):
         else:
             await context.send("Fool")
             await super().on_command_error(context, error)
+
+    async def on_application_command_error(
+        self, interaction: nextcord.Interaction, exception: ApplicationError
+    ) -> None:
+        if isinstance(exception, ac.ApplicationMissingRole):
+            await interaction.send("Imagine not being a staff")
+        else:
+            await interaction.send("Fool")
+            await super().on_application_command_error(interaction, exception)
 
 
 bot = OrangcBot(

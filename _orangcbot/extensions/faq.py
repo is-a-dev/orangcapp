@@ -96,8 +96,8 @@ class FAQDropdown(nextcord.ui.Select):
         super().__init__(placeholder="Select your question.", options=options)
         self._message: nextcord.Message = None
 
-    def update_msg(self, message: nextcord.Message):
-        self._message: nextcord.Message = message
+    def update_msg(self, message: nextcord.Message | nextcord.InteractionMessage):
+        self._message: nextcord.Message | nextcord.InteractionMessage = message
 
     async def callback(self, interaction: nextcord.Interaction):
         await interaction.response.defer()
@@ -130,12 +130,24 @@ class FAQ(commands.Cog):
         """Show FAQ."""
         k = FAQView()
         embed = nextcord.Embed(
-            title="Welcome to FAQ",
+            title="Welcome to FAQ.",
             description="Click the dropdown below to toggle the questions.",
             color=nextcord.Color.blurple(),
         )
         m = await ctx.send(embed=embed, view=k)
         k.update_msg(m)
+
+    @nextcord.slash_command(name="faq")
+    async def faq_slash(self, interaction: nextcord.Interaction) -> None:
+        """Show FAQ."""
+        k = FAQView()
+        embed = nextcord.Embed(
+            title="Welcome to FAQ.",
+            description="Click the dropdown below to toggle the questions.",
+            color=nextcord.Color.blurple(),
+        )
+        m = await interaction.send(embed=embed, view=k)
+        k.update_msg(m)  # type: ignore[reportArgumentType]
 
 
 def setup(bot):

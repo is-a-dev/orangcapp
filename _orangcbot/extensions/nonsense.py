@@ -5,9 +5,11 @@ from typing import TYPE_CHECKING, Literal, Optional
 
 import aiohttp
 import nextcord
+from nextcord import Interaction, SlashOption, slash_command
 from nextcord.ext import commands
 
-from .converters import SubdomainNameConverter
+from .converters import SlashSubdomainNameConverter, SubdomainNameConverter
+from .types import Domain
 
 
 class DomainNotExistError(commands.CommandError):
@@ -73,14 +75,14 @@ class ReportDegenModal(nextcord.ui.Modal):
 
 class ProposeView(nextcord.ui.View):
     if TYPE_CHECKING:
-        message: nextcord.Message
+        message: nextcord.Message | nextcord.InteractionMessage
 
     def __init__(self, spouse_id: int):
         super().__init__(timeout=30)
         self._spouse_id: int = spouse_id
         self._answered: Optional[bool] = None
 
-    def update_msg(self, msg: nextcord.Message):
+    def update_msg(self, msg: nextcord.Message | nextcord.InteractionMessage):
         self._message = msg
 
     @nextcord.ui.button(label="Yes", style=nextcord.ButtonStyle.green)
@@ -179,7 +181,8 @@ class Nonsense(commands.Cog):
             )
         )
 
-    def fetch_description_about_a_domain(self, data: Dict):
+    @classmethod
+    def fetch_description_about_a_domain(cls, data: Domain):
         parsed_contact = {}
         for platform, username in data["owner"].items():
             if platform == "username":
@@ -273,6 +276,74 @@ class Nonsense(commands.Cog):
             await ctx.send(
                 "This domain is still available. Claim it before someone take it."
             )
+
+
+class NonsenseSlash(commands.Cog):
+    def __init__(self, bot: commands.Bot) -> None:
+        self._bot: commands.Bot = bot
+
+    @nextcord.slash_command()
+    async def check(
+        self,
+        interaction: nextcord.Interaction,
+        domain: SlashSubdomainNameConverter = SlashOption(
+            description="The domain name to check for.", required=True
+        ),
+    ) -> None:
+        try:
+            data = await request(
+                True,
+                "GET",
+                f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
+            )
+            await interaction.send(f"Domain {domain} is already taken.")
+        except DomainNotExistError:
+            await interaction.send(
+                "This domain is still available. Claim it before someone take it."
+            )
+
+    @slash_command()
+    async def whois(
+        self,
+        interaction: Interaction,
+        domain: SlashSubdomainNameConverter = SlashOption(
+            description="The is-a.dev domain name to find whois for.", required=True
+        ),
+    ) -> None:
+        try:
+            data = await request(
+                True,
+                "GET",
+                f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
+            )
+            await interaction.send(
+                embed=nextcord.Embed(
+                    title=f"Domain info for {domain}.is-a.dev",
+                    description=Nonsense.fetch_description_about_a_domain(data),
+                    color=nextcord.Color.red(),
+                )
+            )
+        except DomainNotExistError:
+            await interaction.send("Domain requested cannot be found. Aborting.")
+
+    @slash_command()
+    async def report_degenerate(self, interaction: Interaction) -> None:
+        await interaction.response.send_modal(ReportDegenModal())
+
+    @slash_command()
+    async def propose(self, interaction: Interaction) -> None:
+        k = ProposeView(interaction.user.id)
+        l = await interaction.send("Will you marry me?", view=k)
+        k.update_msg(l)
+
+    @slash_command()
+    async def links(self, interaction: Interaction) -> None:
+        """Links that are important to this service."""
+        k = """Please also check those channels:
+        <#991779321758896258> (for an interactive experience go to <#960446827579199488> and type `oc/faq`)
+        <#1228996111390343229>
+        """
+        await interaction.send(k, view=LinkView())
 
 
 def setup(bot: commands.Bot):
