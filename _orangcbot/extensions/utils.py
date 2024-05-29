@@ -1,10 +1,9 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
 import nextcord
 from nextcord.ui import Item
-
-from typing import TYPE_CHECKING
 
 
 class TextBasedOnlyAuthorCheck(Item):
