@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import nextcord
-from nextcord import Attachment, Interaction, SlashOption, slash_command
+from nextcord import Interaction, SlashOption, slash_command
 from nextcord.ext import commands
 
 
