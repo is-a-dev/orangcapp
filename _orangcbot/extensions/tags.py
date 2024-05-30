@@ -1,3 +1,4 @@
+# ruff: noqa
 from nextcord.ext import commands
 
 nohelp = """

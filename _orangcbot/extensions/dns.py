@@ -4,7 +4,6 @@ import random
 from typing import TYPE_CHECKING
 
 import nextcord
-import whois
 from dns import resolver as _dnsresolver
 from nextcord.ext import commands
 

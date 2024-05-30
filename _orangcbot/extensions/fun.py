@@ -12,7 +12,6 @@ import asyncio
 import datetime
 
 # import os
-from os import getenv
 
 _psl = PSL()
 import random

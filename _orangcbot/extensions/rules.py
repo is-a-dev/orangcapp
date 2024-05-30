@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Final, List, Optional, Tuple
 
 import nextcord
+from nextcord import Embed
 from nextcord.ext import commands, menus
 
 RULES: Final[List[str]] = [
