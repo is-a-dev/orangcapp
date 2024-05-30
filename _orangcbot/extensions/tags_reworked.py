@@ -207,7 +207,7 @@ class TagsNewSlash(commands.Cog):
         """Request a tag"""
         with self._db.cursor() as cursor:
             cursor.execute("SELECT * FROM taginfo\nWHERE name=%s", (tag_name,))
-            if info := cursor.fetchone():
+            if cursor.fetchone() is not None:
                 # print(info)
                 await interaction.send(
                     embed=nextcord.Embed(
@@ -228,7 +228,7 @@ class TagsNewSlash(commands.Cog):
         """Delete a tag"""
         with self._db.cursor() as cursor:
             cursor.execute("SELECT * FROM taginfo WHERE name=%s", (tag_name,))
-            if info := cursor.fetchone():
+            if cursor.fetchone() is not None:
                 cursor.execute("DELETE FROM taginfo WHERE name=%s", (tag_name,))
                 self._db.commit()
                 await interaction.send("Done")

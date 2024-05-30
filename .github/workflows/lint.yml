@@ -19,6 +19,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade ruff
           python3 -m pip install --upgrade requests
+          python3 -m pip install --upgrade nextcord
       - name: Test 1
         uses: chartboost/ruff-action@v1
         env:

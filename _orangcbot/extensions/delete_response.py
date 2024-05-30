@@ -19,7 +19,7 @@ class DeleteResponse(commands.Cog):
                 n = await self._bot.get_channel(event.channel_id).fetch_message(
                     event.message_id
                 )
-                if self._bot.get_user(event.user_id).bot == False:  # type: ignore[reportOptionalMemberAccess]
+                if not self._bot.get_user(event.user_id).bot:  # type: ignore[reportOptionalMemberAccess]
                     if n.author.id == self._bot.user.id:  # type: ignore[reportOptionalMemberAccess]
                         await n.delete()
                     else:
