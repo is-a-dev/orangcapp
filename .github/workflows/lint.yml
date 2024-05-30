@@ -13,14 +13,14 @@ jobs:
         id: python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: '3.11'
       - name: Install dependencies
         id: install-deps
         run: |
-          python3 -m pip install --upgrade black
+          python3 -m pip install --upgrade ruff
           python3 -m pip install --upgrade requests
       - name: Test 1
-        run: "black --check ."
+        uses: chartboost/ruff-action@v1
         env:
           PR_TESTING: 1
       - name: Test 2
