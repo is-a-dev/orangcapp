@@ -13,7 +13,6 @@ class DeleteResponse(commands.Cog):
         if event.event_type == "REACTION_ADD":
             # print(event.emoji == "<:delete:1236642973576331328>")
             if str(event.emoji) == "<:delete:1236642973576331328>":
-
                 # Do not delete suggestions
                 if event.channel_id == 1236200920317169695:
                     return
@@ -22,7 +21,6 @@ class DeleteResponse(commands.Cog):
                 )
                 if self._bot.get_user(event.user_id).bot == False:  # type: ignore[reportOptionalMemberAccess]
                     if n.author.id == self._bot.user.id:  # type: ignore[reportOptionalMemberAccess]
-
                         await n.delete()
                     else:
                         pass

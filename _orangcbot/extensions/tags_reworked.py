@@ -113,7 +113,7 @@ class TagCreationModal(nextcord.ui.Modal):
                 try:
                     cursor.execute(
                         # f"INSERT INTO taginfo VALUES('{id.hex}', '{self.my_name.value}', '{self.my_title.value}', '{self.my_content.value}', '{str(interaction.user.id)}')"
-                        f"INSERT INTO taginfo VALUES(%s, %s, %s, %s, %s)",
+                        "INSERT INTO taginfo VALUES(%s, %s, %s, %s, %s)",
                         (
                             id.hex,
                             self.my_name.value,

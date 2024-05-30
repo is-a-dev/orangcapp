@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-from os import environ, getenv
+from os import environ
 
 from dotenv import load_dotenv
 
 load_dotenv()
 import os
-import traceback
 
 import nextcord
-import psycopg2
 from nextcord import ApplicationError, Intents
 from nextcord.ext import application_checks as ac
 from nextcord.ext import commands, help_commands

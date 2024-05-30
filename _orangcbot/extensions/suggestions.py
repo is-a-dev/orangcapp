@@ -10,7 +10,7 @@ from nextcord.ext import application_checks, commands
 # from models.basecog import BaseCog
 
 if TYPE_CHECKING:
-    from nextcord import TextChannel
+    pass
 
 
 class Suggestion(commands.Cog):
