@@ -266,7 +266,7 @@ class Nonsense(commands.Cog):
         self, ctx: commands.Context, domain: SubdomainNameConverter
     ) -> None:
         try:
-            data = await request(
+            await request(
                 True,
                 "GET",
                 f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
@@ -291,7 +291,7 @@ class NonsenseSlash(commands.Cog):
         ),
     ) -> None:
         try:
-            data = await request(
+            await request(
                 True,
                 "GET",
                 f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
