@@ -29,6 +29,17 @@ class Testings(commands.Cog):
         await ctx.bot.sync_application_commands()
         await ctx.send("Request satisfied, master.")
 
+    @commands.command()
+    @commands.has_role(830875873027817484)
+    async def disable_oneword_cog(self, ctx: commands.Context) -> None:
+        try:
+            self._bot.unload_extension("extensions.oneword")
+        except commands.ExtensionNotLoaded:
+            await ctx.send("Oneword cog not already loaded.")
+        await ctx.send(
+            "Unloaded extension. Please ask my master to reload the cog if needed."
+        )
+
 
 def setup(bot: commands.Bot) -> None:
     bot.add_cog(Testings(bot))
