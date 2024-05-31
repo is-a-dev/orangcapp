@@ -79,6 +79,7 @@ bot.load_extension("extensions.delete_response")
 bot.load_extension("extensions.nixwiki")
 bot.load_extension("extensions.archwiki")
 bot.load_extension("extensions.github")
+bot.load_extension("extensions.swiftie")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
