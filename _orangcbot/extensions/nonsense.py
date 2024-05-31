@@ -348,3 +348,4 @@ class NonsenseSlash(commands.Cog):
 
 def setup(bot: commands.Bot):
     bot.add_cog(Nonsense(bot))
+    bot.add_cog(NonsenseSlash(bot))
