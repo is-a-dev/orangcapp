@@ -8,8 +8,6 @@ from nextcord.ext import commands
 from psl_dns import PSL
 
 dotenv.load_dotenv()
-import asyncio
-import datetime
 
 # import os
 
@@ -63,47 +61,48 @@ class SlapConfirmView(nextcord.ui.View):
             )
 
 
-class SlapView(nextcord.ui.View):
-    if TYPE_CHECKING:
-        _message: Optional[nextcord.Message]
-
-    def __init__(self, *, invitation: _BattleInvitation, ctx: commands.Context):
-        super().__init__()
-        self._invitation = invitation
-        self._ctx: commands.Context = ctx
-        self._message: Optional[nextcord.Message] = None
-        self._user_1_count: int = 0
-        self._user_2_count: int = 0
-
-    async def timeout(self):
-        await asyncio.sleep(90)
-        self.children[0].disabled = True  # type: ignore[reportAttributeAccessIssue]
-        self.stop()
-
-    def set_message(self, message: nextcord.Message):
-        self.message = message
-
-    def determine_winner(self):
-        return (
-            self._invitation.uid1
-            if self._user_1_count > self._user_2_count
-            else self._invitation.uid2
-        )
-
-    @nextcord.ui.button(label="Slap!", style=nextcord.ButtonStyle.red)
-    async def _slap(
-        self, button: nextcord.ui.Button, interaction: nextcord.Interaction
-    ):
-        if interaction.user.id == self._invitation.uid1:  # type: ignore[reportOptionalMemberAccess]
-            self._user_1_count += 1
-            await interaction.response.defer()
-        if interaction.user.id == self._invitation.uid2:  # type: ignore[reportOptionalMemberAccess]
-            self._user_2_count += 1
-            await interaction.response.defer()
-        else:
-            await interaction.response.send_message(
-                "You are not a competitor.", ephemeral=True
-            )
+# class SlapView(nextcord.ui.View):
+#     if TYPE_CHECKING:
+#         _message: Optional[nextcord.Message]
+#
+#     def __init__(self, *, invitation: _BattleInvitation, ctx: commands.Context):
+#         super().__init__()
+#         self._invitation = invitation
+#         self._ctx: commands.Context = ctx
+#         self._message: Optional[nextcord.Message] = None
+#         self._user_1_count: int = 0
+#         self._user_2_count: int = 0
+#
+#     async def timeout(self):
+#         await asyncio.sleep(90)
+#         self.children[0].disabled = True  # type: ignore[reportAttributeAccessIssue]
+#         self.stop()
+#
+#     def set_message(self, message: nextcord.Message):
+#         self.message = message
+#
+#     def determine_winner(self):
+#         return (
+#             self._invitation.uid1
+#             if self._user_1_count > self._user_2_count
+#             else self._invitation.uid2
+#         )
+#
+#     @nextcord.ui.button(label="Slap!", style=nextcord.ButtonStyle.red)
+#     async def _slap(
+#         self, button: nextcord.ui.Button, interaction: nextcord.Interaction
+#     ):
+#         if interaction.user.id == self._invitation.uid1:  # type: ignore[reportOptionalMemberAccess]
+#             self._user_1_count += 1
+#             await interaction.response.defer()
+#         if interaction.user.id == self._invitation.uid2:  # type: ignore[reportOptionalMemberAccess]
+#             self._user_2_count += 1
+#             await interaction.response.defer()
+#         else:
+#             await interaction.response.send_message(
+#                 "You are not a competitor.", ephemeral=True
+#             )
+#
 
 
 class BonkView(nextcord.ui.View):
@@ -201,34 +200,34 @@ class Fun(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    @commands.command()
-    @commands.is_owner()
-    async def slappy(self, ctx: commands.Context, *, user: nextcord.Member):
-        inv = _BattleInvitation(ctx.author.id, user.id)
-        await ctx.send(
-            f"<@{int(user.id)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.",
-            allowed_mentions=nextcord.AllowedMentions.none(),
-            view=SlapConfirmView(ctx, inv),
-        )
-
-        def check(m: _BattleInvitation):
-            return m.id == inv.id
-
-        await ctx.bot.wait_for("battle_acceptance", check=check, timeout=60)
-        k = SlapView(invitation=inv, ctx=ctx)
-        end = datetime.datetime.now() + datetime.timedelta(seconds=90)
-        i = await ctx.send(
-            f"<@{int(inv.uid1)}> and <@{inv.uid2}> has gone for a Slappy Slappy game. Press the button to score. This game ends in {nextcord.utils.format_dt(end, style='R')}.",
-            allowed_mentions=nextcord.AllowedMentions.none(),
-            view=k,
-        )
-        await k.wait()
-        winner = k.determine_winner()
-        await i.edit(
-            content=f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappy game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.",
-            allowed_mentions=nextcord.AllowedMentions.none(),
-            view=k,
-        )
+    # @commands.command()
+    # @commands.is_owner()
+    # async def slappy(self, ctx: commands.Context, *, user: nextcord.Member):
+    #     inv = _BattleInvitation(ctx.author.id, user.id)
+    #     await ctx.send(
+    #         f"<@{int(user.id)}>, <@{int(ctx.author.id)}> has invited you to a Slappy Slappy game.",
+    #         allowed_mentions=nextcord.AllowedMentions.none(),
+    #         view=SlapConfirmView(ctx, inv),
+    #     )
+    #
+    #     def check(m: _BattleInvitation):
+    #         return m.id == inv.id
+    #
+    #     await ctx.bot.wait_for("battle_acceptance", check=check, timeout=60)
+    #     k = SlapView(invitation=inv, ctx=ctx)
+    #     end = datetime.datetime.now() + datetime.timedelta(seconds=90)
+    #     i = await ctx.send(
+    #         f"<@{int(inv.uid1)}> and <@{inv.uid2}> has gone for a Slappy Slappy game. Press the button to score. This game ends in {nextcord.utils.format_dt(end, style='R')}.",
+    #         allowed_mentions=nextcord.AllowedMentions.none(),
+    #         view=k,
+    #     )
+    #     await k.wait()
+    #     winner = k.determine_winner()
+    #     await i.edit(
+    #         content=f"<@{inv.uid1}> and <@{inv.uid2}> played a Slappy Slappy game in which <@{winner}> was the winner. This game has ended in {nextcord.utils.format_dt(end)}.",
+    #         allowed_mentions=nextcord.AllowedMentions.none(),
+    #         view=k,
+    #     )
 
     @commands.command()
     async def moral(
