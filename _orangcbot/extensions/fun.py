@@ -8,8 +8,6 @@ from nextcord.ext import commands
 from psl_dns import PSL
 
 dotenv.load_dotenv()
-import asyncio
-import datetime
 
 # import os
 from os import getenv
