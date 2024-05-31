@@ -283,6 +283,20 @@ class NonsenseSlash(commands.Cog):
         self._bot: commands.Bot = bot
 
     @nextcord.slash_command()
+    async def ban(
+        self,
+        interaction: nextcord.Interaction,
+        user: nextcord.Member = SlashOption(
+            description="The member to ban", required=True
+        ),
+        reason: str = SlashOption(description="The reason to ban", required=True),
+    ) -> None:
+        """Ban somebody of your choosing. Note that this may not work."""
+        await interaction.send(
+            f"Banned **{user.display_name}** (ID {user.id}) for reason: **{reason}**"
+        )
+
+    @nextcord.slash_command()
     async def check(
         self,
         interaction: nextcord.Interaction,
