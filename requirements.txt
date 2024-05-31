@@ -7,3 +7,4 @@ psycopg2-binary
 nextcord-ext-help-commands
 nextcord-ext-menus
 python-whois
+forex-python

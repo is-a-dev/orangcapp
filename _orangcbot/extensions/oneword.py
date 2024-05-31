@@ -34,6 +34,8 @@ class Oneword(commands.Cog):
     async def on_message_edit(
         self, before: nextcord.Message, after: nextcord.Message
     ) -> None:
+        if after.channel.id != ONEWORD_CHANNEL_ID:
+            return
         if before.id != after.id:
             return
         if after.author.get_role(STAFF_ROLE_ID):  # type: ignore[reportAttributeAccessIssue]
