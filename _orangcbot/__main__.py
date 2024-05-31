@@ -56,7 +56,7 @@ bot = OrangcBot(
     command_prefix=prefix,
     help_command=help_commands.PaginatedHelpCommand(),
     case_insensitive=True,
-    owner_id=716134528409665586,
+    owner_ids=[716134528409665586, 853158265466257448],
     allowed_mentions=nextcord.AllowedMentions.none(),
 )
 # @bot.event
