@@ -71,7 +71,7 @@ class ArchWiki(commands.Cog):
             ) as resp:
                 k = await resp.json()
                 if len(k[1]) == 0:
-                    await interaction.send("No results foundd, aborting.")
+                    await interaction.send("No results found, aborting.")
                     return
                 l: ArchWikiButtonMenu = ArchWikiButtonMenu(k)
                 await l.start(interaction=interaction)
