@@ -10,7 +10,6 @@ from psl_dns import PSL
 dotenv.load_dotenv()
 
 # import os
-from os import getenv
 
 _psl = PSL()
 import random

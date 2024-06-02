@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Final, Generic, Self, TypeVar
+from typing import Final, Generic, Self, TypeVar
 
 import aiohttp
 import nextcord
-from nextcord import SlashOption, slash_command
+from nextcord import SlashOption
 from nextcord.ext import commands, menus
 
 T = TypeVar("T")

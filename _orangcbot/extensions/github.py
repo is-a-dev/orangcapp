@@ -42,7 +42,7 @@ class GitHub(commands.Cog):
             return
         full_matches: List[re.Match] = re.findall(FULL_MATCH_ANY_REPO, message.content)
         # print(full_matches)
-        is_a_dev_matches: List[re.Match] = re.findall(
+        is_a_dev_matches: List[re.Match] = re.findall(  # noqa: F841
             MATCH_IS_A_DEV_ONLY, message.content
         )
         pr_list: List[_PRRawObject] = []
