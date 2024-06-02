@@ -57,7 +57,7 @@ class OrangcBot(commands.Bot):
 
 
 def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
-    if key == None:
+    if key is None:
         return 0
     else:
         return int(key)
