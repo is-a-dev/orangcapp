@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from os import environ
+from typing import Optional
 
 from dotenv import load_dotenv
 
@@ -13,6 +14,10 @@ from nextcord.ext import application_checks as ac
 from nextcord.ext import commands, help_commands
 
 prefix = "oct/" if os.getenv("TEST") else "oc/"
+
+
+class ConvertibleToInt:
+    def __int__(self) -> int: ...
 
 
 class OrangcBot(commands.Bot):
@@ -51,12 +56,23 @@ class OrangcBot(commands.Bot):
             await super().on_application_command_error(interaction, exception)
 
 
+def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
+    if key is None:
+        return 0
+    else:
+        return int(key)
+
+
+owner_ids = [716134528409665586]
+if not convert_none_to_0(os.getenv("TEST")):  # type: ignore[reportArgumentType]
+    owner_ids.append(853158265466257448)
+
 bot = OrangcBot(
     intents=Intents.all(),
     command_prefix=prefix,
     help_command=help_commands.PaginatedHelpCommand(),
     case_insensitive=True,
-    owner_ids=[716134528409665586, 853158265466257448],
+    owner_ids=owner_ids,
     allowed_mentions=nextcord.AllowedMentions.none(),
 )
 # @bot.event
