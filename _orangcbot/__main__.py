@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-
-from os import environ, getenv
+from os import environ
 from typing import Optional
-
 
 from dotenv import load_dotenv
 
