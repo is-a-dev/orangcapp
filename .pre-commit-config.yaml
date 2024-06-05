@@ -11,7 +11,8 @@ repos:
       - id: ruff
         args: [ --fix ]
     # Run the formatter.
-      - id: ruff-format
+        # We don't need this as of now. I need black.
+      #      - id: ruff-format
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:

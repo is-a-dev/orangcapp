@@ -17,11 +17,11 @@ jobs:
       - name: Install dependencies
         id: install-deps
         run: |
-          python3 -m pip install --upgrade ruff
+          python3 -m pip install --upgrade black
           python3 -m pip install --upgrade requests
           python3 -m pip install --upgrade nextcord
       - name: Test 1
-        uses: chartboost/ruff-action@v1
+        run: "black --check ."
         env:
           PR_TESTING: 1
       - name: Test 2
