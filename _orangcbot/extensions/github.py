@@ -90,7 +90,7 @@ class GitHub(commands.Cog):
                 title="PR/Issue",
                 description=embed_description,
                 color=nextcord.Color.from_rgb(136, 225, 180),
-            )
+            ).set_footer(text="No other messages, even 'Please' or 'Thank you'.")
         )
 
         @commands.Cog.listener("on_message_edit")
