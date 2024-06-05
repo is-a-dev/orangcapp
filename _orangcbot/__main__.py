@@ -32,7 +32,7 @@ class OrangcBot(commands.Bot):
         super().__init__(*args, **kwargs)
 
     async def on_command_error(
-        self, context: commands.Context, error: Exception
+        self, context: commands.Context, error: commands.CommandError
     ) -> None:
         if isinstance(error, commands.NotOwner):
             await context.send("Impersonator")
