@@ -292,6 +292,9 @@ class NonsenseSlash(commands.Cog):
         reason: str = SlashOption(description="The reason to ban", required=True),
     ) -> None:
         """Ban somebody of your choosing. Note that this may not work."""
+        await user.send(
+            f"You have been banned from **{interaction.guild.name}** for reason: {reason}"
+        )
         await interaction.send(
             f"Banned **{user.display_name}** (ID {user.id}) for reason: **{reason}**"
         )
@@ -330,12 +333,22 @@ class NonsenseSlash(commands.Cog):
                 "GET",
                 f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
             )
+            view = nextcord.ui.View()
+
+            view.add_item(
+                nextcord.ui.Button(
+                    style=nextcord.ButtonStyle.url,
+                    url=f"https://github.com/is-a-dev/register/edit/main/domains/{domain}.json",
+                    label="Edit this subdomain?",
+                )
+            )
             await interaction.send(
                 embed=nextcord.Embed(
                     title=f"Domain info for {domain}.is-a.dev",
                     description=Nonsense.fetch_description_about_a_domain(data),
                     color=nextcord.Color.red(),
-                )
+                ),
+                view=view,
             )
         except DomainNotExistError:
             await interaction.send("Domain requested cannot be found. Aborting.")

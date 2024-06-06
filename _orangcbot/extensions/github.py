@@ -7,6 +7,9 @@ import aiohttp
 import nextcord
 from nextcord.ext import commands
 
+import nextcord
+from nextcord import slash_command, SlashOption, Interaction
+
 
 async def request(*args, **kwargs):
     async with aiohttp.ClientSession() as session:
