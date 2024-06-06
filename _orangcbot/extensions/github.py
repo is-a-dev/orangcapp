@@ -51,6 +51,8 @@ class GitHub(commands.Cog):
         pr_list: List[_PRRawObject] = []
         if len(full_matches) > 0:
             for x in full_matches:
+                if x[0] == "https://github.com/":
+                    await message.edit(suppress=True)
                 # print(x)
                 repo_owner = x[1]
                 repo_name = x[2]
@@ -80,7 +82,6 @@ class GitHub(commands.Cog):
 
             return
         # if message.channel.id == PR_CHANNEL_ID:
-        await message.edit(suppress=True)
         embed_description = """"""
         for pr in pr_list:
             i = await request(
