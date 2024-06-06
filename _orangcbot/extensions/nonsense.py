@@ -330,12 +330,22 @@ class NonsenseSlash(commands.Cog):
                 "GET",
                 f"https://raw.githubusercontent.com/is-a-dev/register/main/domains/{domain}.json",
             )
+            view = nextcord.ui.View()
+
+            view.add_item(
+                nextcord.ui.Button(
+                    style=nextcord.ButtonStyle.url,
+                    url=f"https://github.com/is-a-dev/register/edit/main/domains/{domain}.json",
+                    label="Edit this subdomain?",
+                )
+            )
             await interaction.send(
                 embed=nextcord.Embed(
                     title=f"Domain info for {domain}.is-a.dev",
                     description=Nonsense.fetch_description_about_a_domain(data),
                     color=nextcord.Color.red(),
-                )
+                ),
+                view=view,
             )
         except DomainNotExistError:
             await interaction.send("Domain requested cannot be found. Aborting.")
