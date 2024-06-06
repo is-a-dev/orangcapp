@@ -292,6 +292,9 @@ class NonsenseSlash(commands.Cog):
         reason: str = SlashOption(description="The reason to ban", required=True),
     ) -> None:
         """Ban somebody of your choosing. Note that this may not work."""
+        await user.send(
+            f"You have been banned from **{interaction.guild.name}** for reason: {reason}"
+        )
         await interaction.send(
             f"Banned **{user.display_name}** (ID {user.id}) for reason: **{reason}**"
         )
