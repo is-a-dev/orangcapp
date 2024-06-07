@@ -207,7 +207,7 @@ class Nonsense(commands.Cog):
         record_desc = """**Record Info**:\n"""
         for x, y in data["record"].items():
             if x == "CNAME":
-                record_desc += f"**{x}**: {y} [(visit this CNAME?)](https://{y})\n"
+                record_desc += f"**{x}**: [{y}](https://{y})\n"
             else:
                 record_desc += f"**{x}**: {y}\n"
 
