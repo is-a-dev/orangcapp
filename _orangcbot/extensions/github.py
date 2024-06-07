@@ -97,21 +97,26 @@ class GitHub(commands.Cog):
             ).set_footer(text="No other messages, even 'Please' or 'Thank you'.")
         )
 
-        @commands.Cog.listener("on_message_edit")
-        async def prevent_edit(
-            self, before: nextcord.Message, after: nextcord.Message
-        ) -> None:
-            if message.author.bot:
-                return
-            full_matches: List[re.Match] = re.findall(
-                FULL_MATCH_ANY_REPO, message.content
-            )
-            if len(full_matches) > 0:
-                return
+    @commands.Cog.listener("on_message_edit")
+    async def prevent_edit(
+        self, before: nextcord.Message, after: nextcord.Message
+    ) -> None:
+        if before.author.bot:
+            return
+        full_matches: List[re.Match] = re.findall(FULL_MATCH_ANY_REPO, after.content)
+        if len(full_matches) > 0:
+            return
 
-            if before.channel.id == PR_CHANNEL_ID:
-                if before.author.get_role(STAFF_ROLE_ID) is None:
-                    await after.delete()
+        if before.channel.id != PR_CHANNEL_ID:
+            return
+
+        if before.channel.id == PR_CHANNEL_ID:
+            if before.author.get_role(STAFF_ROLE_ID) is None:
+                await after.delete()
+
+    @nextcord.slash_command()
+    async def gh(self, interaction: nextcord.Interaction) -> None:
+        pass
 
 
 def setup(bot: commands.Bot) -> None:
