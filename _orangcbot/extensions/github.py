@@ -101,9 +101,9 @@ class GitHub(commands.Cog):
     async def prevent_edit(
         self, before: nextcord.Message, after: nextcord.Message
     ) -> None:
+        full_matches: List[re.Match] = re.findall(FULL_MATCH_ANY_REPO, after.content)
         if before.author.bot:
             return
-        full_matches: List[re.Match] = re.findall(FULL_MATCH_ANY_REPO, after.content)
         if len(full_matches) > 0:
             return
 
