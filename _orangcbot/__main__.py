@@ -94,6 +94,8 @@ bot.load_extension("extensions.nixwiki")
 bot.load_extension("extensions.archwiki")
 bot.load_extension("extensions.github")
 bot.load_extension("extensions.swiftie")
+bot.load_extension("extensions.oneword")
+bot.load_extension("extensions.stars")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
