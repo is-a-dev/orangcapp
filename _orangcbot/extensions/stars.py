@@ -1,12 +1,11 @@
 from __future__ import annotations
-from typing import Final, Optional
-
-from nextcord.ext import commands, tasks
-import nextcord
-
-import aiohttp
 
 import os
+from typing import Final, Optional
+
+import aiohttp
+import nextcord
+from nextcord.ext import commands, tasks
 
 
 async def request(*args, **kwargs):
