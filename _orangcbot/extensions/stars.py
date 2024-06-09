@@ -18,6 +18,10 @@ class Stars(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self._bot: commands.Bot = bot
         self.STAR_CHANNEL_ID: Final[int] = 1248483372242829313
+        self.update_star.start()
+
+    def cog_unload(self) -> None:
+        self.update_star.stop()
 
     @tasks.loop(minutes=10)
     async def update_star(self):
