@@ -13,6 +13,8 @@ from nextcord import ApplicationError, Intents
 from nextcord.ext import application_checks as ac
 from nextcord.ext import commands, help_commands
 
+import traceback
+
 prefix = "oct/" if os.getenv("TEST") else "oc/"
 
 
@@ -55,6 +57,9 @@ class OrangcBot(commands.Bot):
             await interaction.send("Fool")
             await super().on_application_command_error(interaction, exception)
 
+    async def on_error(self, error: Exception):
+        await self.get_user(716134528409665586).send(traceback.format_exception(error))
+
 
 def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
     if key is None:
@@ -81,7 +86,10 @@ bot = OrangcBot(
 #     await k.send(traceback.format_exception(error))
 #     print(traceback.format_exception(error))
 
-bot.load_extension("onami")
+# TODO: Remove onami when nextcord 3.0 release
+if nextcord.version_info < (3, 0, 0):
+    bot.load_extension("onami")
+
 bot.load_extension("extensions.fun")
 bot.load_extension("extensions.faq")
 bot.load_extension("extensions.antiphishing")
@@ -96,6 +104,7 @@ bot.load_extension("extensions.github")
 bot.load_extension("extensions.swiftie")
 bot.load_extension("extensions.oneword")
 bot.load_extension("extensions.stars")
+bot.load_extension("extensions.ping_cutedog")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
