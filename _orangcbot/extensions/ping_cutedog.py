@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Final
+
 from nextcord import AllowedMentions, Object
 from nextcord.ext import commands
-
-from typing import TYPE_CHECKING, Final
 
 if TYPE_CHECKING:
     from nextcord import Message

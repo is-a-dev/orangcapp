@@ -7,13 +7,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 import os
+import traceback
 
 import nextcord
 from nextcord import ApplicationError, Intents
 from nextcord.ext import application_checks as ac
 from nextcord.ext import commands, help_commands
-
-import traceback
 
 prefix = "oct/" if os.getenv("TEST") else "oc/"
 
