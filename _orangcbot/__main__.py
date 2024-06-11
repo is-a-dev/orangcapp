@@ -104,6 +104,7 @@ bot.load_extension("extensions.swiftie")
 bot.load_extension("extensions.oneword")
 bot.load_extension("extensions.stars")
 bot.load_extension("extensions.ping_cutedog")
+bot.load_extension("extensions.chatbot")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
