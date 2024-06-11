@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from nextcord.ext import commands
-
-from nextcord import slash_command, SlashOption, Interaction, Embed
-
 from dotenv import load_dotenv
+from nextcord import Embed, Interaction, SlashOption, slash_command
+from nextcord.ext import commands
 
 load_dotenv()
 from os import getenv
+
 import aiohttp
 
 
