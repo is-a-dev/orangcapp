@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-import nextcord
-from nextcord.ext import commands
-from nextcord import Message, message_command, slash_command, SlashOption, Interaction
-
-
-from nextcord import ui
-
 import black
+import nextcord
+from nextcord import Interaction, SlashOption, slash_command, ui
+from nextcord.ext import commands
 
 
 class FormatModal(ui.Modal):
