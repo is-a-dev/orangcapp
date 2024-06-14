@@ -385,6 +385,22 @@ class FunSlash(commands.Cog):
             f"**{member.display_name}**'s moral status is **{state}**"
         )
 
+    @nextcord.slash_command()
+    async def fool(
+        self,
+        interaction: nextcord.Interaction,
+        member: nextcord.User = SlashOption(
+            description="The member you want to see the fool level of.", required=False
+        ),
+    ) -> None:
+        if not member:
+            member = interaction.user
+        if member.id == 716134528409665586:
+            level = 0
+        else:
+            level = random.randint(0, 100)
+        await interaction.send(f"{member.display_name} is {level}% a fool.")
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))

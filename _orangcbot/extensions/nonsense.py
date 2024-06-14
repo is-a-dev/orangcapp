@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Optional
 
 import aiohttp
 import nextcord
-from nextcord import Interaction, SlashOption, slash_command
+from nextcord import HTTPException, Interaction, SlashOption, slash_command
 from nextcord.ext import commands
 
 from .converters import SlashSubdomainNameConverter, SubdomainNameConverter
@@ -103,9 +103,9 @@ class ProposeView(nextcord.ui.View):
 
     async def on_timeout(self):
         for child in self.children:
-            child.disabled = True
+            child.disabled = True  # type: ignore
         if not self._answered:
-            await self._message.edit("You missed the boat. Failure.", view=self)
+            await self._message.edit("You missed the boat. Failure.", view=self)  # type: ignore
 
     async def interaction_check(self, interaction: nextcord.Interaction):
         if interaction.user.id == self._spouse_id:
@@ -292,9 +292,12 @@ class NonsenseSlash(commands.Cog):
         reason: str = SlashOption(description="The reason to ban", required=True),
     ) -> None:
         """Ban somebody of your choosing. Note that this may not work."""
-        await user.send(
-            f"You have been banned from **{interaction.guild.name}** for reason: {reason}"
-        )
+        try:
+            await user.send(
+                f"You have been banned from **{interaction.guild.name}** for reason: {reason}"
+            )
+        except HTTPException:
+            pass
         await interaction.send(
             f"Banned **{user.display_name}** (ID {user.id}) for reason: **{reason}**"
         )
