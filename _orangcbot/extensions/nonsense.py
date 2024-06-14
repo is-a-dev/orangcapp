@@ -8,7 +8,12 @@ import nextcord
 from nextcord import HTTPException, Interaction, SlashOption, slash_command
 from nextcord.ext import commands
 
-from .converters import SlashSubdomainNameConverter, SubdomainNameConverter
+from .converters import (
+    EnsureHTTPConverter,
+    SlashEnsureHTTPConverter,
+    SlashSubdomainNameConverter,
+    SubdomainNameConverter,
+)
 from .types import Domain
 
 
@@ -44,6 +49,9 @@ async def request(requesting_domain: bool = False, *args, **kwargs):
             if ans.status == 404 and requesting_domain:
                 raise DomainNotExistError("imagine")
             return await ans.json(content_type=None)
+
+
+request.__doc__ = aiohttp.ClientSession.request.__doc__
 
 
 class ReportDegenModal(nextcord.ui.Modal):
@@ -172,7 +180,7 @@ class Nonsense(commands.Cog):
     @commands.command()
     # @commands.cooldown(3, 8, commands.BucketType.user)
     # @commands.has_role(830875873027817484)
-    async def screenshot(self, ctx: commands.Context, url: str):
+    async def screenshot(self, ctx: commands.Context, url: EnsureHTTPConverter):
         await ctx.send(
             embed=nextcord.Embed(
                 title="Screenshot",
@@ -374,6 +382,27 @@ class NonsenseSlash(commands.Cog):
         <#1228996111390343229>
         """
         await interaction.send(k, view=LinkView())
+
+    @slash_command()
+    async def screenshot(self, interaction: Interaction) -> None:
+        pass
+
+    @screenshot.subcommand()
+    async def from_url(
+        self,
+        interaction: Interaction,
+        url: SlashEnsureHTTPConverter = SlashOption(
+            description="The URL to screenshot", required=True
+        ),
+    ) -> None:
+        """Screenshot an URL."""
+        await interaction.send(
+            embed=nextcord.Embed(
+                title="Screenshot",
+                description=f"[Open in browser for fast rendering](https://image.thum.io/get/{url})",
+                color=nextcord.Color.red(),
+            )
+        )
 
 
 def setup(bot: commands.Bot):
