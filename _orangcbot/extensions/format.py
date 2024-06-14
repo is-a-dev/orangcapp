@@ -22,7 +22,7 @@ class FormatModal(ui.Modal):
         await interaction.send(
             embed=nextcord.Embed(
                 title="Formatted code",
-                description=f"`{response}`",
+                description=f"```py\n{response}\n```",
                 color=nextcord.Color.green(),
             )
         )
@@ -51,7 +51,7 @@ class Format(commands.Cog):
         await interaction.send(
             embed=nextcord.Embed(
                 title="Formatted code",
-                description=f"```{response}```",
+                description=f"```py\n{response}\n```",
                 color=nextcord.Color.green(),
             )
         )
