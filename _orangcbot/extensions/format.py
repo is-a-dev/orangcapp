@@ -8,17 +8,17 @@ from nextcord.ext import commands
 
 class FormatModal(ui.Modal):
     def __init__(self) -> None:
-        self.code = ui.TextInput(
+        super().__init__(title="Format code", timeout=900)
+        self.code_to_format = ui.TextInput(
             label="Code to format",
             style=nextcord.TextInputStyle.paragraph,
             required=True,
         )
-        self.add_item(self.code)
-        super().__init__(title="Format code", timeout=900)
+        self.add_item(self.code_to_format)
 
     async def callback(self, interaction: Interaction) -> None:
         await interaction.response.defer()
-        response = black.format_str(self.code.value)  # type: ignore -- it is required lmao
+        response = black.format_str(self.code_to_format.value)  # type: ignore -- it is required lmao
         await interaction.send(
             embed=nextcord.Embed(
                 title="Formatted code",
