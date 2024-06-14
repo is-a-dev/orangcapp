@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 import nextcord
 from nextcord.ui import Item
 
+import aiohttp
+
 
 class TextBasedOnlyAuthorCheck(Item):
     if TYPE_CHECKING:
