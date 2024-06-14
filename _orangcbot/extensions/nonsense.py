@@ -404,17 +404,6 @@ class NonsenseSlash(commands.Cog):
             )
         )
 
-    @screenshot.subcommand()
-    async def from_url(
-        self,
-        interaction: Interaction,
-        pr_num: int = SlashOption(
-            descripton="The PR to fetch record of", required=True
-        ),
-    ) -> None:
-        """Screenshot a website from PR link."""
-        ...
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(Nonsense(bot))
