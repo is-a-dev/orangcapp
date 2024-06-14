@@ -18,7 +18,7 @@ class FormatModal(ui.Modal):
 
     async def callback(self, interaction: Interaction) -> None:
         await interaction.response.defer()
-        response = black.format_str(self.code_to_format.value)  # type: ignore -- it is required lmao
+        response = black.format_str(self.code_to_format.value, mode=black.Mode())  # type: ignore -- it is required lmao
         await interaction.send(
             embed=nextcord.Embed(
                 title="Formatted code",
