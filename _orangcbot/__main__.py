@@ -58,6 +58,7 @@ class OrangcBot(commands.Bot):
 
     async def on_error(self, error: Exception):
         await self.get_user(716134528409665586).send(traceback.format_exception(error))
+        await super().on_error(error)
 
 
 def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
@@ -68,8 +69,8 @@ def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
 
 
 owner_ids = [716134528409665586]
-if not convert_none_to_0(os.getenv("TEST")):  # type: ignore[reportArgumentType]
-    owner_ids.append(853158265466257448)
+# if not convert_none_to_0(os.getenv("TEST")):  # type: ignore[reportArgumentType]
+#     owner_ids.append(853158265466257448)
 
 bot = OrangcBot(
     intents=Intents.all(),
