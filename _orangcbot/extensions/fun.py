@@ -30,6 +30,8 @@ MAIN_SERVER_GUILD_ID: Literal[830872854677422150] = 830872854677422150
 #        return _randommer_api_key != None
 #    return commands.check(predicate)
 
+DEGENERATE_ROLE_ID: Literal[1238746465111642122] = 1238746465111642122
+
 
 # async def _request_randommer(*, params, path):
 #    async with aiohttp.ClientSession() as session:
@@ -244,6 +246,8 @@ class Fun(commands.Cog):
             state = "Beneath contempt"
         elif member.id == 961063229168164864:  # type: ignore[reportOptionalMemberAccess]
             state = "Degenerate"
+        elif member.get_role(DEGENERATE_ROLE_ID):
+            state = r"Degenerate\*"
         else:
             state = choice(_morals)
 
@@ -260,7 +264,8 @@ class Fun(commands.Cog):
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
             state = "Degenerate"
-
+        elif member.get_role(DEGENERATE_ROLE_ID):
+            state = r"Degenerate\*"
         else:
             state = choice(_morals)
         await interaction.response.send_message(
@@ -366,7 +371,7 @@ class FunSlash(commands.Cog):
     async def moral(
         self,
         interaction: Interaction,
-        member: nextcord.User = SlashOption(
+        member: nextcord.Member = SlashOption(
             description="The user you want to see the moral.", required=False
         ),
     ) -> None:
@@ -378,6 +383,8 @@ class FunSlash(commands.Cog):
             state = "Beneath contempt"
         elif member.id == 961063229168164864:
             state = "Degenerate"
+        elif member.get_role(DEGENERATE_ROLE_ID):
+            state = r"Degenerate\*"
 
         else:
             state = choice(_morals)
