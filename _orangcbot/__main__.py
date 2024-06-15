@@ -89,6 +89,7 @@ bot = OrangcBot(
 # TODO: Remove onami when nextcord 3.0 release
 if nextcord.version_info < (3, 0, 0):
     bot.load_extension("onami")
+bot.load_extension("extensions.antihoist")
 
 bot.load_extension("extensions.fun")
 bot.load_extension("extensions.faq")
