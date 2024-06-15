@@ -9,12 +9,12 @@ from nextcord import (
     Interaction,
     Message,
     SlashOption,
+    TextInputStyle,
     message_command,
     slash_command,
 )
 from nextcord.errors import InteractionResponded
 from nextcord.ext import application_checks, commands
-from nextcord import TextInputStyle
 
 # from models.basecog import BaseCog
 

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from nextcord.ext import commands
-from typing import TYPE_CHECKING
 from string import ascii_letters
+from typing import TYPE_CHECKING
+
+from nextcord.ext import commands
 
 if TYPE_CHECKING:
     import nextcord
