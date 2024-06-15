@@ -3,14 +3,48 @@ from __future__ import annotations
 from contextlib import suppress
 from typing import TYPE_CHECKING
 
-from nextcord import Colour, Embed, Interaction, SlashOption, slash_command
+from nextcord import (
+    Colour,
+    Embed,
+    Interaction,
+    Message,
+    SlashOption,
+    message_command,
+    slash_command,
+)
 from nextcord.errors import InteractionResponded
 from nextcord.ext import application_checks, commands
+from nextcord import TextInputStyle
 
 # from models.basecog import BaseCog
 
 if TYPE_CHECKING:
     pass
+
+from nextcord import ui
+
+
+class ApproveOrDeny(ui.Modal):
+    def __init__(self, mode: bool, message: Message) -> None:
+        self._suggestion_msg: Message = message
+        if mode:
+            title = "Approve the suggestion"
+        else:
+            title = "Deny the suggestion"
+        self._mode: bool = mode
+        super().__init__(title=title, timeout=180)
+        self.reas = ui.TextInput(
+            label="Give a reason.", style=TextInputStyle.paragraph, required=True
+        )
+        self.add_item(self.reas)
+
+    async def callback(self, interaction: Interaction) -> None:
+        embed = self._suggestion_msg.embeds[0]
+        embed.add_field(
+            name=f"{'Approved by' if self._mode else 'Denied by'} {interaction.user.display_name}",
+            value=self.reas.value,
+        )
+        await self._suggestion_msg.edit(embed=embed)
 
 
 class Suggestion(commands.Cog):
@@ -19,6 +53,26 @@ class Suggestion(commands.Cog):
         self.suggestion_channel = 1236200920317169695
 
     suggestion_mode = ["the server", "the service"]
+
+    @message_command(name="Approve the suggestion")
+    @application_checks.has_role(830875873027817484)
+    async def approve_suggestion_msg(
+        self, interaction: Interaction, message: Message
+    ) -> None:
+        if interaction.channel.id != self.suggestion_channel:
+            await interaction.send("You fucked up life. Good job!")
+            return
+        await interaction.response.send_modal(ApproveOrDeny(True, message))
+
+    @message_command(name="Deny the suggestion")
+    @application_checks.has_role(830875873027817484)
+    async def deny_suggestion_msg(
+        self, interaction: Interaction, message: Message
+    ) -> None:
+        if interaction.channel.id != self.suggestion_channel:
+            await interaction.send("You fucked up life. Good job!")
+            return
+        await interaction.response.send_modal(ApproveOrDeny(False, message))
 
     @slash_command(name="suggestion")
     async def _suggestion(self, interaction: Interaction):
@@ -114,6 +168,8 @@ class Suggestion(commands.Cog):
             name="why", description="Why did you deny this request?", required=False
         ),
     ):
+        if not why:
+            why = "No reason provided"
         channel = self.bot.get_channel(self.suggestion_channel)
         message = await channel.fetch_message(int(messageId))
         embed = message.embeds[0]
