@@ -66,7 +66,7 @@ class GitHub(commands.Cog):
                 )
         if len(very_short_matches) > 0:
             for x in very_short_matches:
-                pr_id = x.group(2)
+                pr_id = x
                 repo_owner = "is-a-dev"
                 repo_name = "register"
                 pr_list.append(
@@ -100,9 +100,9 @@ class GitHub(commands.Cog):
             embed.set_footer(text="No other messages, even 'Please' or 'Thank you'.")
         await message.channel.send(embed=embed)
 
-    @nextcord.slash_command()
-    async def gh(self, interaction: nextcord.Interaction) -> None:
-        pass
+    # @nextcord.slash_command()
+    # async def gh(self, interaction: nextcord.Interaction) -> None:
+    #     pass
 
 
 def setup(bot: commands.Bot) -> None:
