@@ -23,6 +23,7 @@ FULL_MATCH_ANY_REPO = r"(https:\/\/github.com\/)?([A-Za-z1-9-]+)\/([A-Za-z1-9-]+
 
 
 MATCH_IS_A_DEV_ONLY = r"register#(\d+)"
+VERY_SHORT_MESSAGE = r"##(\d+)"
 PR_CHANNEL_ID = 1130858271620726784
 STAFF_ROLE_ID = 1197475623745110109
 
@@ -45,6 +46,10 @@ class GitHub(commands.Cog):
         is_a_dev_matches: List[re.Match] = re.findall(  # noqa: F841
             MATCH_IS_A_DEV_ONLY, message.content
         )
+
+        very_short_matches: List[re.Match] = re.findall(
+            VERY_SHORT_MESSAGE, message.content
+        )
         pr_list: List[_PRRawObject] = []
         if len(full_matches) > 0:
             for x in full_matches:
@@ -59,26 +64,25 @@ class GitHub(commands.Cog):
                         repo_owner=repo_owner, repo_name=repo_name, pr_id=pr_id
                     )
                 )
+        if len(very_short_matches) > 0:
+            for x in very_short_matches:
+                pr_id = x.group(2)
+                repo_owner = "is-a-dev"
+                repo_name = "register"
+                pr_list.append(
+                    _PRRawObject(
+                        repo_owner=repo_owner, repo_name=repo_name, pr_id=pr_id
+                    )
+                )
+
         # TODO: Fix is-a-dev-only regex
 
-        # elif len(is_a_dev_matches) > 0:
-        #     for x in is_a_dev_matches:
-        #         repo_owner = "is-a-dev"
-        #         repo_name = "register"
-        #         pr_id = x[0]
-        #         pr_list.append(
-        #             _PRRawObject(
-        #                 repo_owner=repo_owner, repo_name=repo_name, pr_id=pr_id
-        #             )
-        #         )
-
-        else:
+        if len(pr_list) == 0:
             if message.channel.id == PR_CHANNEL_ID:
-                if message.author.get_role(STAFF_ROLE_ID) is None:
+                if message.author.get_role(STAFF_ROLE_ID) is None:  # type: ignore
                     await message.delete()
 
             return
-        # if message.channel.id == PR_CHANNEL_ID:
         embed_description = """"""
         for pr in pr_list:
             i = await request(
@@ -86,30 +90,15 @@ class GitHub(commands.Cog):
                 f"https://api.github.com/repos/{pr.repo_owner}/{pr.repo_name}/issues/{pr.pr_id}",
             )
             embed_description += f"[(#{pr.pr_id}) {i['title']}]({i['html_url']})\n"
-        await message.channel.send(
-            embed=nextcord.Embed(
-                title="PR/Issue",
-                description=embed_description,
-                color=nextcord.Color.from_rgb(136, 225, 180),
-            ).set_footer(text="No other messages, even 'Please' or 'Thank you'.")
+
+        embed = nextcord.Embed(
+            title="PR/Issue",
+            description=embed_description,
+            color=nextcord.Color.from_rgb(136, 225, 180),
         )
-
-    @commands.Cog.listener("on_message_edit")
-    async def prevent_edit(
-        self, before: nextcord.Message, after: nextcord.Message
-    ) -> None:
-        full_matches: List[re.Match] = re.findall(FULL_MATCH_ANY_REPO, after.content)
-        if before.author.bot:
-            return
-        if len(full_matches) > 0:
-            return
-
-        if before.channel.id != PR_CHANNEL_ID:
-            return
-
-        if before.channel.id == PR_CHANNEL_ID:
-            if before.author.get_role(STAFF_ROLE_ID) is None:
-                await after.delete()
+        if message.channel == PR_CHANNEL_ID:
+            embed.set_footer(text="No other messages, even 'Please' or 'Thank you'.")
+        await message.channel.send(embed=embed)
 
     @nextcord.slash_command()
     async def gh(self, interaction: nextcord.Interaction) -> None:

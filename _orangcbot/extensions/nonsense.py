@@ -126,14 +126,14 @@ class ProposeView(nextcord.ui.View):
 class ReportDegenView(nextcord.ui.View):
     def __init__(self):
         super().__init__(timeout=300)
-        self.message: nextcord.Message = None
+        self.message: nextcord.Message | None = None
 
     def update_msg(self, msg: nextcord.Message):
-        self.message: nextcord.Message = msg
+        self.message: nextcord.Message | None = msg
 
     @nextcord.ui.button(label="Report a Degenerate")
     async def report_degen(
-        self, button: nextcord.ui.Button, interaction: nextcord.Interaction
+        self, button: nextcord.ui.Button, interaction: nextcord.Interaction  # type: ignore[reportUnusedVariable]
     ) -> None:
         if interaction.user.id == self.message.author.id:
             await interaction.response.send_modal(ReportDegenModal())

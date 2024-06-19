@@ -46,3 +46,25 @@ class EnsureHTTPConverter(commands.Converter):
         if argument.startswith("https://") or argument.startswith("http://"):
             return argument
         return "http://" + argument
+
+
+class EnsureNoHTTPConverter(commands.Converter):
+    async def convert(self, ctx: commands.Context, argument: str) -> str:  # type: ignore[reportUnusedArgument]
+        if argument.startswith("https://"):
+            return argument[len("https://") - 1 :]
+
+        if argument.startswith("http://"):
+            return argument[len("http://") - 1 :]
+
+        return argument
+
+
+class SlashEnsureNoHTTPConverter(commands.Converter):
+    async def convert(self, ctx: commands.Context, argument: str) -> str:  # type: ignore[reportUnusedArgument]
+        if argument.startswith("https://"):
+            return argument[len("https://") - 1 :]
+
+        if argument.startswith("http://"):
+            return argument[len("http://") - 1 :]
+
+        return argument

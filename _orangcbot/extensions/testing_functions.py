@@ -1,3 +1,4 @@
+from nextcord import Member, User
 from nextcord.ext import commands
 
 
