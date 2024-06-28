@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import logging
 from string import ascii_letters
 from typing import TYPE_CHECKING, Final
 
 from nextcord.ext import commands
-import logging
 
 if TYPE_CHECKING:
     import nextcord
