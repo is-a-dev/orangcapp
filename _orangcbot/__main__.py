@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 import os
-import traceback
 
 import nextcord
 from nextcord import ApplicationError, Intents
