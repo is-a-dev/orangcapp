@@ -56,10 +56,6 @@ class OrangcBot(commands.Bot):
             await interaction.send("Fool")
             await super().on_application_command_error(interaction, exception)
 
-    async def on_error(self, error: Exception):
-        await self.get_user(716134528409665586).send(traceback.format_exception(error))
-        await super().on_error(error)
-
 
 def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
     if key is None:
