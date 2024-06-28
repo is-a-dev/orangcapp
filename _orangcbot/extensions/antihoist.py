@@ -19,7 +19,9 @@ class AutoMod(commands.Cog):
         try:
             assert self._bot.intents.auto_moderation is True
         except AssertionError:
-            logging.getLogger('nextcord').warn("auto_moderation intents is not enabled. Fix it or else no nword notifications.")
+            logging.getLogger("nextcord").warn(
+                "auto_moderation intents is not enabled. Fix it or else no nword notifications."
+            )
 
     @commands.Cog.listener("on_member_join")
     async def check_nickname_on_join(self, member: nextcord.Member) -> None:
@@ -36,9 +38,6 @@ class AutoMod(commands.Cog):
             await after.edit(
                 nick="kid", reason="having a strong craving to be a discord ecelebrity"
             )
-
-    @commands.Cog.listener("on_message_edit")
-    async def 
 
 
 def setup(bot: commands.Bot) -> None:
