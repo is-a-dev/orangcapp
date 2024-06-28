@@ -12,7 +12,7 @@ import traceback
 import nextcord
 from nextcord import ApplicationError, Intents
 from nextcord.ext import application_checks as ac
-from nextcord.ext import commands, help_commands
+from nextcord.ext import commands, help_commands  # type: ignore
 
 prefix = "oct/" if os.getenv("TEST") else "oc/"
 
@@ -87,6 +87,7 @@ bot = OrangcBot(
 #     print(traceback.format_exception(error))
 
 # TODO: Remove onami when nextcord 3.0 release
+# WARNING: Do not remove this if!
 if nextcord.version_info < (3, 0, 0):
     bot.load_extension("onami")
 bot.load_extension("extensions.antihoist")
@@ -107,6 +108,7 @@ bot.load_extension("extensions.oneword")
 bot.load_extension("extensions.stars")
 bot.load_extension("extensions.ping_cutedog")
 bot.load_extension("extensions.chatbot")
+bot.load_extension("extensions.antighostpinging")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
