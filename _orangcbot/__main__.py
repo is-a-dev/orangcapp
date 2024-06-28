@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 import os
-import traceback
 
 import nextcord
 from nextcord import ApplicationError, Intents
@@ -55,10 +54,6 @@ class OrangcBot(commands.Bot):
         else:
             await interaction.send("Fool")
             await super().on_application_command_error(interaction, exception)
-
-    async def on_error(self, error: Exception):
-        await self.get_user(716134528409665586).send(traceback.format_exception(error))
-        await super().on_error(error)
 
 
 def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
@@ -108,7 +103,6 @@ bot.load_extension("extensions.oneword")
 bot.load_extension("extensions.stars")
 bot.load_extension("extensions.ping_cutedog")
 bot.load_extension("extensions.chatbot")
-bot.load_extension("extensions.antighostpinging")
 if os.getenv("HASDB"):
     bot.load_extension("extensions.tags_reworked")
 # bot.load_extension("extensions.forum")
