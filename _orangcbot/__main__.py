@@ -66,9 +66,16 @@ def convert_none_to_0(key: Optional[ConvertibleToInt] = None) -> int:
 owner_ids = [716134528409665586]
 # if not convert_none_to_0(os.getenv("TEST")):  # type: ignore[reportArgumentType]
 #     owner_ids.append(853158265466257448)
+intents = Intents.all()
+intents.typing = False
+intents.presences = False
+intents.integrations = False
+intents.invites = False
+intents.voice_states = False
+intents.scheduled_events = False
 
 bot = OrangcBot(
-    intents=Intents.all(),
+    intents=intents,
     command_prefix=prefix,
     help_command=help_commands.PaginatedHelpCommand(),
     case_insensitive=True,
